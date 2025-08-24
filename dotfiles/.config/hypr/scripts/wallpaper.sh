@@ -195,3 +195,18 @@ echo "* { current-image: url(\"$blurredwallpaper\", height); }" >"$rasifile"
 _writeLog "Generate new cached wallpaper square-$wallpaperfilename"
 magick $tmpwallpaper -gravity Center -extent 1:1 $squarewallpaper
 cp $squarewallpaper $generatedversions/square-$wallpaperfilename.png
+
+# -----------------------------------------------------
+# Update SDDM background
+# -----------------------------------------------------
+
+SDDM_THEME=$(awk -F= '/^Current=/ {print $2}' /etc/sddm.conf.d/theme.conf | tr -d ' "')
+THEME_DIR="/usr/share/sddm/themes/$SDDM_THEME"
+
+if [ -d "$THEME_DIR" ]; then
+    sudo cp -f "$used_wallpaper" "$THEME_DIR/default.jpg"
+    echo "Updated SDDM background with $used_wallpaper"
+else
+    echo "Theme directory $THEME_DIR not found!"
+fi
+
