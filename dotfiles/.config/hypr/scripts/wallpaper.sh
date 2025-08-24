@@ -205,6 +205,7 @@ THEME_DIR="/usr/share/sddm/themes/$SDDM_THEME"
 
 if [ -d "$THEME_DIR" ]; then
     sudo cp -f "$used_wallpaper" "$THEME_DIR/default.jpg"
+    sudo touch "$THEME_DIR/default.jpg"
     echo "Updated SDDM background with $used_wallpaper"
 else
     echo "Theme directory $THEME_DIR not found!"
