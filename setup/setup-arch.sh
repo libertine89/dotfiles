@@ -17,15 +17,24 @@ SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 
 # --------------------------------------------------------------
+# Colours
+# --------------------------------------------------------------
+
+GREEN='\033[0;32m'
+WHITE_BOLD='\033[1;97m'
+NONE='\033[0m'
+
+# --------------------------------------------------------------
 # Helper & Functions
 # --------------------------------------------------------------
+
 _execute_step() {
-    echo ">>> Running step: $1 <<<"
+    echo -e "${GREEN}>>> ${WHITE_BOLD}$1${GREEN} <<<${NONE}"
     "$@"
 }
 
 _print_step() {
-    echo "=== $1 ==="
+    echo -e "${GREEN}=== ${WHITE_BOLD}$1${GREEN} ===${NONE}"
 }
 
 _isInstalled() {
@@ -53,7 +62,7 @@ _installYay() {
     temp_path=$(dirname "$SCRIPT")
     git clone https://aur.archlinux.org/yay-bin.git $HOME/Downloads/yay-bin
     cd $HOME/Downloads/yay-bin
-    makepkg -si
+    makepkg --noconfirm -si
     cd $temp_path
     echo ":: yay has been installed successfully."
 }
@@ -97,13 +106,12 @@ _install_omp(){
 }
 
 _add_mirrors(){
-    # Add UK mirrors to pacman mirrorlist
+    # Add working UK mirrors to pacman mirrorlist
     sudo tee -a /etc/pacman.d/mirrorlist >/dev/null <<EOT
 
 ## Custom UK mirrors
-Server = https://mirror.manchester.ac.uk/archlinux/\$repo/os/\$arch
 Server = https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch
-Server = https://mirror.sov.uk.goscomb.net/archlinux/\$repo/os/\$arch
+Server = https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch
 EOT
 }
 
