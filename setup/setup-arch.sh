@@ -96,6 +96,16 @@ _install_omp(){
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/.local/bin
 }
 
+_add_mirrors(){
+    # Add UK mirrors to pacman mirrorlist
+    sudo tee -a /etc/pacman.d/mirrorlist >/dev/null <<EOT
+
+## Custom UK mirrors
+Server = https://mirror.manchester.ac.uk/archlinux/\$repo/os/\$arch
+Server = https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch
+Server = https://mirror.sov.uk.goscomb.net/archlinux/\$repo/os/\$arch
+EOT
+}
 
 _clone_gits(){
     _print_step "_clone_gits"
@@ -196,6 +206,7 @@ EOT
 main(){
     sudo -v
     _execute_step "_clone_gits"
+    _execute_step "_add_mirrors"
     source $GIT_DIR/dotfiles/setup/_lib.sh
     source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "_install_gum"

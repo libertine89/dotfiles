@@ -35,7 +35,6 @@ _finishMessage() {
 
 _writeHeader() {
     distro=$1
-    clear
     echo -e "${GREEN}"
 cat <<"EOF"
    ____    __          
