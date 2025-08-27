@@ -90,4 +90,5 @@ distro=(
     # Added Extras
     "stow"
     "sddm"
+    "cbonsai"
 )

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # --------------------------------------------------------------
 # Variables
@@ -14,13 +15,6 @@ SETUP_SCRIPT="$GIT_DIR/dotfiles/setup/setup-arch.sh"
 SDDM_THEME="sugar-candy"
 SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
-
-# --------------------------------------------------------------
-# Load Sources
-# --------------------------------------------------------------
-
-source $GIT_DIR/dotfiles/setup/_lib.sh
-source $GIT_DIR/dotfiles/setup/pkgs.sh
 
 # --------------------------------------------------------------
 # Helper & Functions
@@ -124,17 +118,6 @@ _clone_gits(){
         echo "Alis repo already exists, pulling latest changes..."
         git -C "$GIT_DIR/alis" pull
     fi
-
-    # Clone cbonsai repo if not already present
-    if [ ! -d "$GIT_DIR/cbonsai/.git" ]; then
-        echo "Cloning cbonsai repo..."
-        git clone "https://aur.archlinux.org/cbonsai.git" "$GIT_DIR/cbonsai"
-        cd "$GIT_DIR/cbonsai"
-        makepkg -si
-    else
-        echo "Cbonsai repo already exists, pulling latest changes..."
-        git -C "$GIT_DIR/cbonsai" pull
-    fi
 }
 
 _install_dotfiles(){
@@ -213,6 +196,8 @@ EOT
 main(){
     sudo -v
     _execute_step "_clone_gits"
+    source $GIT_DIR/dotfiles/setup/_lib.sh
+    source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "_install_gum"
     _writeHeader "Arch"
     _execute_step "_install_yay"
