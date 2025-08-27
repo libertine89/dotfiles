@@ -115,6 +115,12 @@ Server = https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch
 EOT
 }
 
+_update_system(){
+    _print_step "Updating package database and system"
+    sudo pacman -Syyu --noconfirm
+}
+
+
 _clone_gits(){
     _print_step "_clone_gits"
     mkdir -p "$GIT_DIR"
@@ -214,6 +220,7 @@ EOT
 main(){
     sudo -v
     _execute_step "_clone_gits"
+    _execute_step "_update_system"
     _execute_step "_add_mirrors"
     source $GIT_DIR/dotfiles/setup/_lib.sh
     source $GIT_DIR/dotfiles/setup/pkgs.sh
