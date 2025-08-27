@@ -25,8 +25,8 @@ _checkCommandExists() {
 
 _finishMessage() {
     echo
-    echo ":: Installation complete."
-    echo ":: Ready to install the dotfiles with the Dotfiles Installer."    
+    echo ":: Installation complete. Reboot Now"
+    #echo ":: Ready to install the dotfiles with the Dotfiles Installer."
 }
 
 # --------------------------------------------------------------

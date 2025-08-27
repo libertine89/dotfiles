@@ -48,3 +48,46 @@ tools=(
     "gvfs"
     "grim"
 )
+
+distro=(
+    # Hyprland
+    "hyprland"
+    "libnotify"
+    "qt5-wayland"
+    "qt6-wayland"
+    "uwsm"
+    "python-pip"
+    "python-gobject"
+    "python-screeninfo"
+    "nm-connection-editor"
+    "network-manager-applet"
+    "imagemagick"
+    "polkit-gnome"
+    "hyprshade"
+    "grimblast-git"
+    "checkupdates-with-aur"
+    "loupe"
+    "power-profiles-daemon"
+    # Apps
+    "waypaper"
+    "swaync"
+    # Tools
+    "eza"
+    "python-pywalfox"
+    # Themes
+    "papirus-icon-theme"
+    "breeze"
+    # Fonts
+    "otf-font-awesome"
+    "ttf-fira-sans"
+    "ttf-fira-code"
+    "ttf-firacode-nerd"
+    "ttf-dejavu"
+    "noto-fonts"
+    "noto-fonts-emoji"
+    "noto-fonts-cjk"
+    "noto-fonts-extra"
+    # Added Extras
+    "stow"
+    "sddm"
+)
