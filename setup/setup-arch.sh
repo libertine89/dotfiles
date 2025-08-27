@@ -19,8 +19,8 @@ THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 # Load Sources
 # --------------------------------------------------------------
 
-source $SCRIPT_DIR/_lib.sh
-source $SCRIPT_DIR/pkgs.sh
+source $GIT_DIR/dotfiles/setup/_lib.sh
+source $GIT_DIR/dotfiles/setup/pkgs.sh
 
 # --------------------------------------------------------------
 # Helper & Functions
@@ -212,6 +212,7 @@ EOT
 # --------------------------------------------------------------
 main(){
     sudo -v
+    _execute_step "_clone_gits"
     _execute_step "_install_gum"
     _writeHeader "Arch"
     _execute_step "_install_yay"
@@ -222,12 +223,11 @@ main(){
     _execute_step _installPackages "${distro[@]}"
     _execute_step _installPackages "${hyprland[@]}"
     _execute_step "_install_omp"
-    source $SCRIPT_DIR/_prebuilt.sh
-    source $SCRIPT_DIR/_ml4w-apps.sh
-    source $SCRIPT_DIR/_flatpaks.sh
-    source $SCRIPT_DIR/_cursors.sh
-    source $SCRIPT_DIR/_fonts.sh
-    _execute_step "_clone_gits"
+    source $GIT_DIR/dotfiles/setup/_prebuilt.sh
+    source $GIT_DIR/dotfiles/setup/_ml4w-apps.sh
+    source $GIT_DIR/dotfiles/setup/_flatpaks.sh
+    source $GIT_DIR/dotfiles/setup/_cursors.sh
+    source $GIT_DIR/dotfiles/setup/_fonts.sh
     _execute_step "_install_dotfiles"
     _execute_step "_install_sddm_theme"
     _finishMessage
