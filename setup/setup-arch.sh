@@ -15,6 +15,8 @@ SETUP_SCRIPT="$GIT_DIR/dotfiles/setup/setup-arch.sh"
 SDDM_THEME="sugar-candy"
 SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
+CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
+CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
 
 # --------------------------------------------------------------
 # Colours
@@ -29,12 +31,20 @@ NONE='\033[0m'
 # --------------------------------------------------------------
 
 _execute_step() {
-    echo -e "${GREEN}>>> ${WHITE_BOLD}$1${GREEN} <<<${NONE}"
-    "$@"
-}
+    step_name="$1"
+    shift
 
-_print_step() {
-    echo -e "${GREEN}=== ${WHITE_BOLD}$1${GREEN} ===${NONE}"
+    # Calculate dynamic line length
+    step_length=${#step_name}
+    total_length=$((step_length + 8))  # 8 accounts for brackets and spaces
+    line=$(printf '=%.0s' $(seq 1 $total_length))
+
+    echo -e "${GREEN}>>>${WHITE_BOLD}${line}${GREEN}<<<${NONE}"
+    echo -e "${GREEN}>>>${WHITE_BOLD}  $step_name  ${GREEN}<<<${NONE}"
+    echo -e "${GREEN}>>>${WHITE_BOLD}${line}${GREEN}<<<${NONE}"
+
+    # Execute the command
+    "$@"
 }
 
 _isInstalled() {
@@ -78,7 +88,6 @@ _installPackages() {
 }
 
 _install_gum(){
-    _print_step "_install_gum"
     if [[ $(_checkCommandExists "gum") == 0 ]]; then
         echo ":: gum is already installed"
     else
@@ -88,7 +97,6 @@ _install_gum(){
 }
 
 _install_yay(){
-    _print_step "_install_yay"
     if [[ $(_checkCommandExists "yay") == 0 ]]; then
         echo ":: yay is already installed"
     else
@@ -98,7 +106,6 @@ _install_yay(){
 }
 
 _install_omp(){
-    _print_step "_install_omp"
     if [ ! -d $HOME/.local/bin ]; then
         mkdir -p $HOME/.local/bin
     fi
@@ -110,19 +117,17 @@ _add_mirrors(){
     sudo tee -a /etc/pacman.d/mirrorlist >/dev/null <<EOT
 
 ## Custom UK mirrors
-Server = https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch
-Server = https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch
+Server = $CUSTOM_MIRROR1
+Server = $CUSTOM_MIRROR2
 EOT
 }
 
 _update_system(){
-    _print_step "Updating package database and system"
     sudo pacman -Syyu --noconfirm
 }
 
 
 _clone_gits(){
-    _print_step "_clone_gits"
     mkdir -p "$GIT_DIR"
 
     # Clone dotfiles repo if not already present
@@ -145,7 +150,6 @@ _clone_gits(){
 }
 
 _install_dotfiles(){
-    _print_step "_install_dotfiles"
     # Backup existing dotfiles if they exist
     if [ -f "$HOME_DIR/.bashrc" ]; then
         mv "$HOME_DIR/.bashrc" "$HOME_DIR/.bashrc.backup"
@@ -175,7 +179,6 @@ _install_dotfiles(){
 }
 
 _install_sddm_theme() {
-    _print_step "_install_sddm_theme"
     echo "Installing SDDM theme: $SDDM_THEME"
 
     # Setting up sudoers for hyprpaper later
@@ -187,6 +190,14 @@ _install_sddm_theme() {
     #fi
 
     sudo mkdir -p /usr/share/sddm/themes
+
+    # Ensure SDDM theme dependencies are installed
+    for pkg in $THEME_DEPENDENCIES; do
+        if ! pacman -Qi "$pkg" &>/dev/null; then
+            echo "Installing missing package: $pkg"
+            sudo pacman -S --noconfirm --needed "$pkg"
+        fi
+    done
 
     # Copy wallpapers into the selected theme folder
     echo "Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME..."
@@ -219,28 +230,27 @@ EOT
 # --------------------------------------------------------------
 main(){
     sudo -v
-    _execute_step "_clone_gits"
-    _execute_step "_update_system"
-    _execute_step "_add_mirrors"
+    _execute_step "Cloning Git Repos" _clone_gits
+    _execute_step "Updating System" _update_system
+    _execute_step "Adding Custom Mirrors" _add_mirrors
     source $GIT_DIR/dotfiles/setup/_lib.sh
     source $GIT_DIR/dotfiles/setup/pkgs.sh
-    _execute_step "_install_gum"
+    _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
-    _execute_step "_install_yay"
-    _print_step "_installPackages"
-    _execute_step _installPackages "${general[@]}"
-    _execute_step _installPackages "${apps[@]}"
-    _execute_step _installPackages "${tools[@]}"
-    _execute_step _installPackages "${distro[@]}"
-    _execute_step _installPackages "${hyprland[@]}"
-    _execute_step "_install_omp"
-    source $GIT_DIR/dotfiles/setup/_prebuilt.sh
-    source $GIT_DIR/dotfiles/setup/_ml4w-apps.sh
-    source $GIT_DIR/dotfiles/setup/_flatpaks.sh
-    source $GIT_DIR/dotfiles/setup/_cursors.sh
-    source $GIT_DIR/dotfiles/setup/_fonts.sh
-    _execute_step "_install_dotfiles"
-    _execute_step "_install_sddm_theme"
+    _execute_step "Installing Yay" _install_yay
+    _execute_step "Installing General Packages" _installPackages "${general[@]}"
+    _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
+    _execute_step "Installing Tools Packages" _installPackages "${tools[@]}"
+    _execute_step "Installing Distro Packages" _installPackages "${distro[@]}"
+    _execute_step "Installing Hyprland Packages" _installPackages "${hyprland[@]}"
+    _execute_step "Installing Oh My Posh " _install_omp
+    _execute_step "Installing Prebuilt Bins" source $GIT_DIR/dotfiles/setup/_prebuilt.sh
+    _execute_step "Installing ML4W Apps" source $GIT_DIR/dotfiles/setup/_ml4w-apps.sh
+    _execute_step "Installing Flatpaks" source $GIT_DIR/dotfiles/setup/_flatpaks.sh
+    _execute_step "Installing Cursors" source $GIT_DIR/dotfiles/setup/_cursors.sh
+    _execute_step "Installing Fonts" source $GIT_DIR/dotfiles/setup/_fonts.sh
+    _execute_step "Installing Dotfiles" _install_dotfiles
+    _execute_step "Installing SDDM Theme" _install_sddm_theme
     _finishMessage
 }
 
