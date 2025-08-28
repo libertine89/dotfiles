@@ -32,6 +32,7 @@ NONE='\033[0m'
 
 _writeHeader() {
     distro=$1
+    clear
     echo -e "${GREEN}"
 cat <<"EOF"
    ____    __
@@ -69,7 +70,7 @@ _execute_step() {
 
     # Calculate dynamic line length
     step_length=${#step_name}
-    total_length=$((step_length + 8))  # 8 accounts for brackets and spaces
+    total_length=$((step_length + 4))  # 8 accounts for brackets and spaces
     line=$(printf '=%.0s' $(seq 1 $total_length))
 
     echo -e "${GREEN}>>>${WHITE_BOLD}${line}${GREEN}<<<${NONE}"
