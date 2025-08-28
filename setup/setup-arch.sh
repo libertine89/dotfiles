@@ -263,7 +263,7 @@ _finishMessage() {
     cd $HOME_DIR
     rm -rf setup-arch.sh
 
-    echo -e "\n${GREEN}Dependencies & Dotfiles installation complete!${NC}\n"
+    echo -e "\n${GREEN}Dependencies & Dotfiles installation complete!${NONE}\n"
 
     for (( i = 15; i >= 1; i-- )); do
         read -r -s -n 1 -t 1 -p $'\r'"Rebooting in $i seconds... Press Esc to abort or R to reboot now. " KEY
