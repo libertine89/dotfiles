@@ -284,10 +284,10 @@ _finishMessage() {
 # --------------------------------------------------------------
 main(){
     sudo -v
-    source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
     _execute_step "Cloning Git Repos" _clone_gits
+    source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "Updating System" _update_system
     _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
