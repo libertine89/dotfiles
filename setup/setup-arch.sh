@@ -207,7 +207,7 @@ _clone_gits(){
 
     # Clone dotfiles repo if not already present
     if [ ! -d "$GIT_DIR/dotfiles/.git" ]; then
-        echo "${BLUE}   --->${WHITE_BOLD}  Cloning dotfiles repo...${NONE}"
+        echo -e "${BLUE}   --->${WHITE_BOLD}  Cloning dotfiles repo...${NONE}"
         git clone "$DOTFILES_REPO" "$GIT_DIR/dotfiles"
     else
         echo "Dotfiles repo already exists, pulling latest changes..."
@@ -216,7 +216,7 @@ _clone_gits(){
 
     # Clone alis repo if not already present
     if [ ! -d "$GIT_DIR/alis/.git" ]; then
-        echo "${BLUE}   --->${WHITE_BOLD}  Cloning alis repo...${NONE}"
+        echo -e "${BLUE}   --->${WHITE_BOLD}  Cloning alis repo...${NONE}"
         git clone "$ALIS_REPO" "$GIT_DIR/alis"
     else
         echo "Alis repo already exists, pulling latest changes..."
@@ -248,13 +248,13 @@ _install_dotfiles(){
     #stow --target="$HOME_DIR" dotfiles
 
     # Copy all dotfiles and .config folder contents into $HOME_DIR
-    echo "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
     cp -r "$GIT_DIR/dotfiles/dotfiles/." "$HOME_DIR/"
-    echo "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
 }
 
 _install_sddm_theme() {
-    echo "${BLUE}   --->${WHITE_BOLD}  Installing SDDM theme: $SDDM_THEME...${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Installing SDDM theme: $SDDM_THEME...${NONE}"
 
     # Setting up sudoers for hyprpaper later
     #SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
@@ -275,7 +275,7 @@ _install_sddm_theme() {
     done
 
     # Copy wallpapers into the selected theme folder
-    echo "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
     sudo cp -r "$GIT_DIR/dotfiles/dotfiles/.config/ml4w/wallpapers/"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
 
     # Update theme.conf to set Background="default.jpg"
@@ -288,7 +288,7 @@ _install_sddm_theme() {
     fi
 
     # Copy all themes into /usr/share/sddm/themes
-    echo "${BLUE}   --->${WHITE_BOLD}  Copying all themes from $SDDM_THEMES_DIR into /usr/share/sddm/themes...${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying all themes from $SDDM_THEMES_DIR into /usr/share/sddm/themes...${NONE}"
     sudo cp -r "$SDDM_THEMES_DIR/"* /usr/share/sddm/themes/
 
     sudo mkdir -p /etc/sddm.conf.d
@@ -297,7 +297,7 @@ cat <<-EOT | sudo tee /etc/sddm.conf.d/theme.conf >/dev/null
 [Theme]
 Current=$SDDM_THEME
 EOT
-    echo "${BLUE}   --->${WHITE_BOLD}  SDDM theme $SDDM_THEME installed and configured.${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  SDDM theme $SDDM_THEME installed and configured.${NONE}"
 }
 
 _finishMessage() {
