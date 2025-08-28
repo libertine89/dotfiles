@@ -147,6 +147,7 @@ _install_omp(){
 }
 
 _add_mirrors(){
+    echo "Adding custom mirrors.."
     # Add working UK mirrors to pacman mirrorlist
     sudo tee -a /etc/pacman.d/mirrorlist >/dev/null <<EOT
 
@@ -154,6 +155,7 @@ _add_mirrors(){
 Server = $CUSTOM_MIRROR1
 Server = $CUSTOM_MIRROR2
 EOT
+    echo "Complete"
 }
 
 _update_system(){

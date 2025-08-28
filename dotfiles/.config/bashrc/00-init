@@ -9,3 +9,10 @@ export EDITOR=nvim
 export PATH="/usr/lib/ccache/bin/:$PATH"
 export PATH=$PATH:~/.cargo/bin/
 export PATH=$PATH:~/.local/bin/
+
+# -----------------------------------------------------
+# SSH Agent Setup
+# -----------------------------------------------------
+if [[ -f ~/.ssh/id_ed25519 ]]; then
+  ssh-add ~/.ssh/id_ed25519 2>/dev/null
+fi
