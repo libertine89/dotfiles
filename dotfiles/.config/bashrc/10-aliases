@@ -71,16 +71,38 @@ alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
 alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
 alias setkb='setxkbmap de;echo "Keyboard set back to de."'
 
-# -----------------------------------------------------
-# Git helper
-# -----------------------------------------------------
 gpush() {
-    if [ -z "$1" ]; then
-        echo "Usage: gpush \"commit message\""
+    if [ $# -eq 0 ]; then
+        echo "Usage: gpush [repo1 repo2 ...] \"commit message\""
         return 1
     fi
-    git add .
-    git commit -m "$1"
-    git push
+
+    # Last argument is the commit message
+    msg="${!#}"
+
+    # If only one argument, commit in current directory
+    if [ $# -eq 1 ]; then
+        echo "Pushing in current directory"
+        git add .
+        git commit -m "$msg"
+        git push
+        return
+    fi
+
+    # Loop through repos (all args except last)
+    for repo in "${@:1:$(($#-1))}"; do
+        repo_path="/home/$USER/Git/$repo"
+        if [ -d "$repo_path" ]; then
+            echo "Pushing in repo: $repo"
+            cd "$repo_path" || continue
+            git add .
+            git commit -m "$msg"
+            git push
+            cd - >/dev/null || continue
+        else
+            echo "Repo not found: $repo_path"
+        fi
+    done
 }
+
 
