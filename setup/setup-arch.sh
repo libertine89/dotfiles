@@ -30,6 +30,39 @@ NONE='\033[0m'
 # Helper & Functions
 # --------------------------------------------------------------
 
+_writeHeader() {
+    distro=$1
+    echo -e "${GREEN}"
+cat <<"EOF"
+   ____    __
+  / __/__ / /___ _____
+ _\ \/ -_) __/ // / _ \
+/___/\__/\__/\_,_/ .__/
+                /_/
+EOF
+    echo "ML4W Dotfiles for Hyprland for $distro"
+    echo -e "${NONE}"
+    echo "This setup script will install all required packages and dependencies for the dotfiles."
+    echo
+    if gum confirm "DO YOU WANT TO START THE SETUP NOW?: "; then
+        echo ":: Installation started."
+        echo
+    else
+        echo ":: Installation canceled"
+        exit
+    fi
+}
+
+_checkCommandExists() {
+    cmd="$1"
+    if ! command -v "$cmd" >/dev/null; then
+        echo 1
+        return
+    fi
+    echo 0
+    return
+}
+
 _execute_step() {
     step_name="$1"
     shift
@@ -225,18 +258,38 @@ EOT
     echo "SDDM theme $SDDM_THEME installed and configured."
 }
 
+_finishMessage() {
+
+    cd $HOME_DIR
+    rm -rf setup-arch.sh
+
+    echo -e "\n${GREEN}Dependencies & Dotfiles installation complete!${NC}\n"
+
+    for (( i = 15; i >= 1; i-- )); do
+        read -r -s -n 1 -t 1 -p $'\r'"Rebooting in $i seconds... Press Esc to abort or R to reboot now. " KEY
+        if [ $? -eq 0 ]; then
+            case "$KEY" in
+                $'\e') echo -e "\nReboot aborted. Please reboot manually."; return ;;
+                [rR])  echo -e "\nRebooting now..."; reboot; return ;;
+            esac
+        fi
+    done
+
+    echo -e "\nRebooting...\n"
+    reboot
+}
+
 # --------------------------------------------------------------
 # Main Loop
 # --------------------------------------------------------------
 main(){
     sudo -v
-    _execute_step "Cloning Git Repos" _clone_gits
-    _execute_step "Updating System" _update_system
-    _execute_step "Adding Custom Mirrors" _add_mirrors
-    source $GIT_DIR/dotfiles/setup/_lib.sh
     source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
+    _execute_step "Cloning Git Repos" _clone_gits
+    _execute_step "Updating System" _update_system
+    _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
     _execute_step "Installing General Packages" _installPackages "${general[@]}"
     _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
