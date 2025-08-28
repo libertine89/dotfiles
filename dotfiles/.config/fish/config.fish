@@ -9,37 +9,32 @@ end
 
 # Git helper function
 function gpush
-    if test (count $argv) -eq 0
-        echo "Usage: gpush [repo1 repo2 ...] \"commit message\""
-        return 1
-    end
+    set base "$HOME/Git"
+    set argc (count $argv)
+    set msg (string sub -s -1 -- $argv)   # last argument is commit message
 
-    # Last argument is the commit message
-    set msg $argv[(count $argv)]
-
-    # If only one argument, commit in current directory
-    if test (count $argv) -eq 1
-        echo "Pushing in current directory"
+    if test $argc -eq 1
+        # current repo mode
         git add .
         git commit -m "$msg"
         git push
-        return
-    end
+    else
+        # all but last argument are repo names
+        set repos $argv[1..-2]
 
-    # Loop through repos (all args except last)
-    set repos $argv[1..(count $argv)-1]
+        for repo in $repos
+            if test -d "$base/$repo/.git"
+                echo "Pushing in $repo..."
+                pushd "$base/$repo" >/dev/null
 
-    for repo in $repos
-        set repo_path "/home/$USER/Git/$repo"
-        if test -d $repo_path
-            echo "Pushing in repo: $repo"
-            cd $repo_path
-            git add .
-            git commit -m "$msg"
-            git push
-            cd - >/dev/null
-        else
-            echo "Repo not found: $repo_path"
+                git add .
+                git commit -m "$msg"
+                git push
+
+                popd >/dev/null
+            else
+                echo "⚠️ Skipping $repo (not found or not a git repo)"
+            end
         end
     end
 end
