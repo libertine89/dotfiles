@@ -22,9 +22,9 @@ CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
 # Colours
 # --------------------------------------------------------------
 
-GREEN='\033[0;32m'
+GREEN='\033[1;32m'
 WHITE_BOLD='\033[1;97m'
-BLUE='\033[0;34m'
+BLUE='\033[1;34m'
 NONE='\033[0m'
 
 # --------------------------------------------------------------
@@ -279,7 +279,7 @@ cat <<"EOF"
 EOF
     echo -e "${NONE}"
 
-    for (( i = 5; i >= 1; i-- )); do   # shortened to 5 sec for testing
+    for (( i = 15; i >= 1; i-- )); do 
         echo -ne "\rRebooting in $i seconds... Press Esc to abort or R to reboot now. "
         if read -r -s -n 1 -t 1 KEY; then
             case "$KEY" in

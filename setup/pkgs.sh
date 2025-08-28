@@ -29,7 +29,7 @@ apps=(
     "neovim"
     "blueman"
     "qt6ct"
-    "nautilus"
+    "dolphin" #"nautilus" #file manager, trying dophin
 )
 
 tools=(
