@@ -17,14 +17,6 @@ SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
 CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
-### Prog Bar ##
-BAR_LEFT="["
-BAR_RIGHT="]"
-BAR_FILLED="#"
-BAR_EMPTY=" "
-BAR_WIDTH=30
-CURRENT_STEP=0
-TOTAL_STEPS=18
 
 # --------------------------------------------------------------
 # Colours
@@ -74,10 +66,6 @@ _checkCommandExists() {
 }
 
 _execute_step() {
-    # Current step for progress bar & Update
-     CURRENT_STEP=$((CURRENT_STEP+1))
-    _update_progbar "Step $CURRENT_STEP/$TOTAL_STEPS" $(( CURRENT_STEP*100/TOTAL_STEPS ))
-
     # CGet step name & alculate dynamic line length for header
     step_name="$1"
     shift
@@ -91,31 +79,6 @@ _execute_step() {
 
     # Execute the command
     "$@"
-}
-
-_init_progbar() {
-    tput sc
-    tput cup $(( $(tput lines) - 1 )) 0
-    printf "%*s" "$(tput cols)" ""
-    tput rc
-}
-
-_update_progbar() {
-    local TERMINAL_ROWS=$(tput lines)
-    local TERMINAL_COLUMNS=$(tput cols)
-
-    local step_text="$1"
-    local percent=$2
-    local filled_count=$(( percent*BAR_WIDTH/100 ))
-    local empty_count=$(( BAR_WIDTH - filled_count ))
-
-    local filled_segment=$(printf "%0.s$BAR_FILLED" $(seq 1 $filled_count))
-    local empty_segment=$(printf "%0.s$BAR_EMPTY" $(seq 1 $empty_count))
-
-    tput sc
-    tput cup $((TERMINAL_ROWS-2)) 0
-    printf "%-20s %s%s%s %3d%%" "$step_text" "$BAR_LEFT" "$filled_segment$empty_segment" "$BAR_RIGHT" "$percent"
-    tput rc
 }
 
 _isInstalled() {
@@ -340,7 +303,6 @@ EOF
 # --------------------------------------------------------------
 main(){
     sudo -v
-    _init_progbar
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
     _execute_step "Cloning Git Repos" _clone_gits
