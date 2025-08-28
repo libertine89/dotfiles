@@ -17,6 +17,14 @@ SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
 CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
+### Prog Bar ##
+BAR_LEFT="["
+BAR_RIGHT="]"
+BAR_FILLED="#"
+BAR_EMPTY=" "
+BAR_WIDTH=30
+CURRENT_STEP=0
+TOTAL_STEPS=18
 
 # --------------------------------------------------------------
 # Colours
@@ -24,6 +32,7 @@ CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
 
 GREEN='\033[0;32m'
 WHITE_BOLD='\033[1;97m'
+BLUE='\033[0;34m'
 NONE='\033[0m'
 
 # --------------------------------------------------------------
@@ -65,10 +74,13 @@ _checkCommandExists() {
 }
 
 _execute_step() {
+    # Current step for progress bar & Update
+     CURRENT_STEP=$((CURRENT_STEP+1))
+    _update_progbar "Step $CURRENT_STEP/$TOTAL_STEPS" $(( CURRENT_STEP*100/TOTAL_STEPS ))
+
+    # CGet step name & alculate dynamic line length for header
     step_name="$1"
     shift
-
-    # Calculate dynamic line length
     step_length=${#step_name}
     total_length=$((step_length + 4))  # 8 accounts for brackets and spaces
     line=$(printf '=%.0s' $(seq 1 $total_length))
@@ -79,6 +91,31 @@ _execute_step() {
 
     # Execute the command
     "$@"
+}
+
+_init_progbar() {
+    tput sc
+    tput cup $(( $(tput lines) - 1 )) 0
+    printf "%*s" "$(tput cols)" ""
+    tput rc
+}
+
+_update_progbar() {
+    local TERMINAL_ROWS=$(tput lines)
+    local TERMINAL_COLUMNS=$(tput cols)
+
+    local step_text="$1"
+    local percent=$2
+    local filled_count=$(( percent*BAR_WIDTH/100 ))
+    local empty_count=$(( BAR_WIDTH - filled_count ))
+
+    local filled_segment=$(printf "%0.s$BAR_FILLED" $(seq 1 $filled_count))
+    local empty_segment=$(printf "%0.s$BAR_EMPTY" $(seq 1 $empty_count))
+
+    tput sc
+    tput cup $((TERMINAL_ROWS-2)) 0
+    printf "%-20s %s%s%s %3d%%" "$step_text" "$BAR_LEFT" "$filled_segment$empty_segment" "$BAR_RIGHT" "$percent"
+    tput rc
 }
 
 _isInstalled() {
@@ -148,6 +185,8 @@ _install_omp(){
 
 _add_mirrors(){
     echo "Adding custom mirrors.."
+    echo "$CUSTOM_MIRROR1"
+    echo "$CUSTOM_MIRROR2"
     # Add working UK mirrors to pacman mirrorlist
     sudo tee -a /etc/pacman.d/mirrorlist >/dev/null <<EOT
 
@@ -168,7 +207,7 @@ _clone_gits(){
 
     # Clone dotfiles repo if not already present
     if [ ! -d "$GIT_DIR/dotfiles/.git" ]; then
-        echo "Cloning dotfiles repo..."
+        echo "${BLUE}   --->${WHITE_BOLD}  Cloning dotfiles repo...${NONE}"
         git clone "$DOTFILES_REPO" "$GIT_DIR/dotfiles"
     else
         echo "Dotfiles repo already exists, pulling latest changes..."
@@ -177,7 +216,7 @@ _clone_gits(){
 
     # Clone alis repo if not already present
     if [ ! -d "$GIT_DIR/alis/.git" ]; then
-        echo "Cloning alis repo..."
+        echo "${BLUE}   --->${WHITE_BOLD}  Cloning alis repo...${NONE}"
         git clone "$ALIS_REPO" "$GIT_DIR/alis"
     else
         echo "Alis repo already exists, pulling latest changes..."
@@ -209,13 +248,13 @@ _install_dotfiles(){
     #stow --target="$HOME_DIR" dotfiles
 
     # Copy all dotfiles and .config folder contents into $HOME_DIR
-    echo "Copying dotfiles into $HOME_DIR..."
+    echo "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
     cp -r "$GIT_DIR/dotfiles/dotfiles/." "$HOME_DIR/"
-    echo "Dotfiles copied successfully."
+    echo "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
 }
 
 _install_sddm_theme() {
-    echo "Installing SDDM theme: $SDDM_THEME"
+    echo "${BLUE}   --->${WHITE_BOLD}  Installing SDDM theme: $SDDM_THEME...${NONE}"
 
     # Setting up sudoers for hyprpaper later
     #SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
@@ -236,7 +275,7 @@ _install_sddm_theme() {
     done
 
     # Copy wallpapers into the selected theme folder
-    echo "Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME..."
+    echo "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
     sudo cp -r "$GIT_DIR/dotfiles/dotfiles/.config/ml4w/wallpapers/"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
 
     # Update theme.conf to set Background="default.jpg"
@@ -249,7 +288,7 @@ _install_sddm_theme() {
     fi
 
     # Copy all themes into /usr/share/sddm/themes
-    echo "Copying all themes from $SDDM_THEMES_DIR into /usr/share/sddm/themes..."
+    echo "${BLUE}   --->${WHITE_BOLD}  Copying all themes from $SDDM_THEMES_DIR into /usr/share/sddm/themes...${NONE}"
     sudo cp -r "$SDDM_THEMES_DIR/"* /usr/share/sddm/themes/
 
     sudo mkdir -p /etc/sddm.conf.d
@@ -258,22 +297,36 @@ cat <<-EOT | sudo tee /etc/sddm.conf.d/theme.conf >/dev/null
 [Theme]
 Current=$SDDM_THEME
 EOT
-    echo "SDDM theme $SDDM_THEME installed and configured."
+    echo "${BLUE}   --->${WHITE_BOLD}  SDDM theme $SDDM_THEME installed and configured.${NONE}"
 }
 
 _finishMessage() {
-
-    cd $HOME_DIR
+    cd "$HOME_DIR" || exit 1
     rm -rf setup-arch.sh
 
     echo -e "\n${GREEN}Dependencies & Dotfiles installation complete!${NONE}\n"
 
-    for (( i = 15; i >= 1; i-- )); do
-        read -r -s -n 1 -t 1 -p $'\r'"Rebooting in $i seconds... Press Esc to abort or R to reboot now. " KEY
-        if [ $? -eq 0 ]; then
+    echo -e "${GREEN}"
+cat <<"EOF"
+   _____      _     __          __
+  / __(_)__  (_)__ / /  ___ ___/ /
+ / _// / _ \/ (_-</ _ \/ -_) _  / 
+/_/ /_/_//_/_/___/_//_/\__/\_,_/ 
+
+EOF
+    echo -e "${NONE}"
+
+    for (( i = 5; i >= 1; i-- )); do   # shortened to 5 sec for testing
+        echo -ne "\rRebooting in $i seconds... Press Esc to abort or R to reboot now. "
+        if read -r -s -n 1 -t 1 KEY; then
             case "$KEY" in
-                $'\e') echo -e "\nReboot aborted. Please reboot manually."; return ;;
-                [rR])  echo -e "\nRebooting now..."; reboot; return ;;
+                $'\e') 
+                    echo -e "\nReboot aborted. Please reboot manually."; 
+                    return ;;
+                [rR])  
+                    echo -e "\nRebooting now..."; 
+                    reboot; 
+                    return ;;
             esac
         fi
     done
@@ -287,6 +340,7 @@ _finishMessage() {
 # --------------------------------------------------------------
 main(){
     sudo -v
+    _init_progbar
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
     _execute_step "Cloning Git Repos" _clone_gits
