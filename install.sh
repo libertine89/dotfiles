@@ -285,20 +285,19 @@ function _snapper_cfg() {
         fi
     fi
 
-    snapper -c root create-config "$ROOT_SUBVOLUME"
-    snapper -c home create-config "$HOME_SUBVOLUME"
+    sudo snapper -c root create-config "$ROOT_SUBVOLUME"
+    sudo snapper -c home create-config "$HOME_SUBVOLUME"
 
     # Adjust root & home config using variables
-    sed -i "s/^TIMELINE_LIMIT_HOURLY=.*/TIMELINE_LIMIT_HOURLY=\"$SNAPPER_ROOT_HOURLY\"/" /etc/snapper/configs/root
-    sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_ROOT_DAILY\"/" /etc/snapper/configs/root
-
-    sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_HOME_DAILY\"/" /etc/snapper/configs/home
+    sudo sed -i "s/^TIMELINE_LIMIT_HOURLY=.*/TIMELINE_LIMIT_HOURLY=\"$SNAPPER_ROOT_HOURLY\"/" /etc/snapper/configs/root
+    sudo sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_ROOT_DAILY\"/" /etc/snapper/configs/root
+    sudo sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_HOME_DAILY\"/" /etc/snapper/configs/home
 
     # Set config to create and cleanup snaps
-    sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/root
-    sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/root
-    sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/home
-    sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/home
+    sudo sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/root
+    sudo sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/root
+    sudo sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/home
+    sudo sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/home
 
     # Enable systemd timers for snaps
     sudo systemctl enable --now snapper-timeline.timer
