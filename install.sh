@@ -41,6 +41,7 @@ cat <<"EOF"
  _\ \/ -_) __/ // / _ \
 /___/\__/\__/\_,_/ .__/
                 /_/
+
 EOF
     echo "ML4W Dotfiles for Hyprland for $distro"
     echo -e "${NONE}"
@@ -265,7 +266,7 @@ EOT
 
 _finishMessage() {
     cd "$HOME_DIR" || exit 1
-    rm -rf setup-arch.sh
+    rm -rf install.sh
 
     echo -e "\n${GREEN}Dependencies & Dotfiles installation complete!${NONE}\n"
 
