@@ -306,8 +306,11 @@ function _snapper_cfg() {
 }
 
 function _snapshot() {
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Creating $1...${NONE}"
     sudo snapper -c root create -d "$1"
+        echo "root snapshot created."
     sudo snapper -c home create -d "$1"
+        echo "home snapshot created."
 }
 
 _finishMessage() {
