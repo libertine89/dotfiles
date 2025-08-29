@@ -193,27 +193,27 @@ _clone_gits(){
 }
 
 _install_dotfiles(){
-    # Backup existing dotfiles if they exist
-    if [ -f "$HOME_DIR/.bashrc" ]; then
-        mv "$HOME_DIR/.bashrc" "$HOME_DIR/.bashrc.backup"
-        echo "Backed up existing .bashrc to .bashrc.backup"
-    fi
-
-    if [ -f "$HOME_DIR/.zshrc" ]; then
-        mv "$HOME_DIR/.zshrc" "$HOME_DIR/.zshrc.backup"
-        echo "Backed up existing .zshrc to .zshrc.backup"
-    fi
-
-    if [ -f "$HOME_DIR/.config/hypr/hyprland.conf" ]; then
-        mv "$HOME_DIR/.config/hypr/hyprland.conf" "$HOME_DIR/.config/hypr/hyprland.conf.backup"
-        echo "Backed up existing hyprland.conf to hyprland.conf.backup"
-    fi
-
     # Install oh-my-zsh & plug-ins
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting
+
+    # Backup existing dotfiles if they exist
+    if [ -f "$HOME_DIR/.bashrc" ]; then
+        mv "$HOME_DIR/.bashrc" "$HOME_DIR/.bashrc.backup"
+        echo -e " \ ${BLUE}   --->${WHITE_BOLD}  Backed up existing .bashrc to .bashrc.backup.${NONE}"
+    fi
+
+    if [ -f "$HOME_DIR/.zshrc" ]; then
+        mv "$HOME_DIR/.zshrc" "$HOME_DIR/.zshrc.backup"
+        echo -e " | ${BLUE}   --->${WHITE_BOLD}  Backed up existing .zshrc to .zshrc.backup.${NONE}"
+    fi
+
+    if [ -f "$HOME_DIR/.config/hypr/hyprland.conf" ]; then
+        mv "$HOME_DIR/.config/hypr/hyprland.conf" "$HOME_DIR/.config/hypr/hyprland.conf.backup"
+        echo -e " / ${BLUE}   --->${WHITE_BOLD}  Backed up existing hyprland.conf to hyprland.conf.backup.${NONE}"
+    fi
 
     # Use GNU Stow to symlink dotfiles into home directory
     echo -e "${BLUE}   --->${WHITE_BOLD}  Stowing dotfiles into $HOME_DIR...${NONE}"
