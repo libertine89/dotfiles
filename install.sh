@@ -17,6 +17,9 @@ SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
 CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
+SNAPPER_ROOT_HOURLY=12
+SNAPPER_ROOT_DAILY=7
+SNAPPER_HOME_DAILY=7
 
 # --------------------------------------------------------------
 # Colours
@@ -207,14 +210,14 @@ _install_dotfiles(){
     git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting
 
     # Use GNU Stow to symlink dotfiles into home directory
-    #echo "Stowing dotfiles into $HOME_DIR..."
-    #cd "$GIT_DIR/dotfiles" || exit 1
-    #stow --target="$HOME_DIR" dotfiles
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Stowing dotfiles into $HOME_DIR...${NONE}"
+    cd "$GIT_DIR/dotfiles" || exit 1
+    stow --target="$HOME_DIR" dotfiles
 
     # Copy all dotfiles and .config folder contents into $HOME_DIR
-    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
-    cp -r "$GIT_DIR/dotfiles/dotfiles/." "$HOME_DIR/"
-    echo -e "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
+    # echo -e "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
+    # cp -r "$GIT_DIR/dotfiles/dotfiles/." "$HOME_DIR/"
+    # echo -e "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
 }
 
 _install_sddm_theme() {
@@ -264,6 +267,50 @@ EOT
     echo -e "${BLUE}   --->${WHITE_BOLD}  SDDM theme $SDDM_THEME installed and configured.${NONE}"
 }
 
+function _snapper_cfg() {
+    local ROOT_SUBVOLUME="/snapshots/root"
+    local HOME_SUBVOLUME="/snapshots/home"
+
+    if [ -d "/snapshots" ]; then
+        if [ ! -d "$ROOT_SUBVOLUME" ]; then
+            sudo btrfs subvolume create $ROOT_SUBVOLUME
+            sudo chown root:root $ROOT_SUBVOLUME
+            sudo chmod 755 $ROOT_SUBVOLUME
+        fi
+
+        if [ ! -d "$HOME_SUBVOLUME" ]; then
+            sudo btrfs subvolume create $HOME_SUBVOLUME
+            sudo chown "$USER_NAME":"$USER_NAME" $HOME_SUBVOLUME
+            sudo chmod 755 $HOME_SUBVOLUME
+        fi
+    fi
+
+    snapper -c root create-config "$ROOT_SUBVOLUME"
+    snapper -c home create-config "$HOME_SUBVOLUME"
+
+    # Adjust root & home config using variables
+    sed -i "s/^TIMELINE_LIMIT_HOURLY=.*/TIMELINE_LIMIT_HOURLY=\"$SNAPPER_ROOT_HOURLY\"/" /etc/snapper/configs/root
+    sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_ROOT_DAILY\"/" /etc/snapper/configs/root
+
+    sed -i "s/^TIMELINE_LIMIT_DAILY=.*/TIMELINE_LIMIT_DAILY=\"$SNAPPER_HOME_DAILY\"/" /etc/snapper/configs/home
+
+    # Set config to create and cleanup snaps
+    sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/root
+    sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/root
+    sed -i 's/^TIMELINE_CREATE=.*/TIMELINE_CREATE="yes"/' /etc/snapper/configs/home
+    sed -i 's/^TIMELINE_CLEANUP=.*/TIMELINE_CLEANUP="yes"/' /etc/snapper/configs/home
+
+    # Enable systemd timers for snaps
+    sudo systemctl enable --now snapper-timeline.timer
+    sudo systemctl enable --now snapper-cleanup.timer
+
+}
+
+function _snapshot() {
+    snapper -c root create -d "$1"
+    snapper -c home create -d "$1"
+}
+
 _finishMessage() {
     cd "$HOME_DIR" || exit 1
     rm -rf install.sh
@@ -304,6 +351,8 @@ EOF
 # --------------------------------------------------------------
 main(){
     sudo -v
+    _execute_step "Configuring Snapshot" _snapper_cfg
+    _execute_step "Pre Dotfiles Snapshot" _snapshot "Pre Dotfiles Snapshot"
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
     _execute_step "Cloning Git Repos" _clone_gits
@@ -324,6 +373,7 @@ main(){
     _execute_step "Installing Fonts" source $GIT_DIR/dotfiles/setup/_fonts.sh
     _execute_step "Installing Dotfiles" _install_dotfiles
     _execute_step "Installing SDDM Theme" _install_sddm_theme
+    _execute_step "Post Dotfiles Snapshot" _snapshot "Post Dotfiles Snapshot"
     _finishMessage
 }
 
