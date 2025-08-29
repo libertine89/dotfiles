@@ -306,8 +306,8 @@ function _snapper_cfg() {
 }
 
 function _snapshot() {
-    snapper -c root create -d "$1"
-    snapper -c home create -d "$1"
+    sudo snapper -c root create -d "$1"
+    sudo snapper -c home create -d "$1"
 }
 
 _finishMessage() {
