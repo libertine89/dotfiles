@@ -127,7 +127,8 @@ _installPackages() {
 
 _install_gum(){
     if [[ $(_checkCommandExists "gum") == 0 ]]; then
-        echo ":: gum is already installed"
+        # echo ":: gum is already installed" 
+        echo "" # dont show so it boots straight into installer
     else
         echo ":: The installer requires gum. gum will be installed now"
         sudo pacman --noconfirm -S gum
@@ -196,6 +197,11 @@ _install_dotfiles(){
     if [ -f "$HOME_DIR/.bashrc" ]; then
         mv "$HOME_DIR/.bashrc" "$HOME_DIR/.bashrc.backup"
         echo "Backed up existing .bashrc to .bashrc.backup"
+    fi
+
+    if [ -f "$HOME_DIR/.zshrc" ]; then
+        mv "$HOME_DIR/.zshrc" "$HOME_DIR/.zshrc.backup"
+        echo "Backed up existing .zshrc to .zshrc.backup"
     fi
 
     if [ -f "$HOME_DIR/.config/hypr/hyprland.conf" ]; then
@@ -353,10 +359,10 @@ EOF
 # --------------------------------------------------------------
 main(){
     sudo -v
-    _execute_step "Configuring Snapshot" _snapper_cfg
-    _execute_step "Pre Dotfiles Snapshot" _snapshot "Pre Dotfiles Snapshot"
     _execute_step "Installing Gum" _install_gum
     _writeHeader "Arch"
+    _execute_step "Configuring Snapshot" _snapper_cfg
+    _execute_step "Pre Dotfiles Snapshot" _snapshot "Pre Dotfiles Snapshot"
     _execute_step "Cloning Git Repos" _clone_gits
     source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "Updating System" _update_system
