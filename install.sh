@@ -215,15 +215,15 @@ _install_dotfiles(){
         echo -e " / ${BLUE}   --->${WHITE_BOLD}  Backed up existing hyprland.conf to hyprland.conf.backup.${NONE}"
     fi
 
+     if [ -f "$HOME_DIR/.local/share/user-places.xbel" ]; then
+        mv "$HOME_DIR/.local/share/user-places.xbel" "$HOME_DIR/.local/share/user-places.xbel.backup"
+        echo -e " | ${BLUE}   --->${WHITE_BOLD}  Backed up existing user-places.xbel to user-places.xbel.backup.${NONE}"
+    fi
+
     # Use GNU Stow to symlink dotfiles into home directory
     echo -e "${BLUE}   --->${WHITE_BOLD}  Stowing dotfiles into $HOME_DIR...${NONE}"
     cd "$GIT_DIR/dotfiles" || exit 1
     stow --target="$HOME_DIR" dotfiles
-
-    # Copy all dotfiles and .config folder contents into $HOME_DIR
-    # echo -e "${BLUE}   --->${WHITE_BOLD}  Copying dotfiles into $HOME_DIR...${NONE}"
-    # cp -r "$GIT_DIR/dotfiles/dotfiles/." "$HOME_DIR/"
-    # echo -e "${BLUE}   --->${WHITE_BOLD}  Dotfiles copied successfully.${NONE}"
 }
 
 _install_sddm_theme() {
