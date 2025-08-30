@@ -1,10 +1,18 @@
 #!/usr/bin/env fish
 
-oh-my-posh init fish --config $HOME/.config/ohmyposh/EDM115-newline.omp.json | source
-fastfetch
-if status is-interactive
-end
+# -----------------------------------------------------
+# Prompt Theme
+# -----------------------------------------------------
 
+oh-my-posh init fish --config $HOME/.config/ohmyposh/EDM115-newline.omp.json | source
+
+# -----------------------------------------------------
+# Init
+# -----------------------------------------------------
+
+fastfetch
+
+# Start ssh if its setup for Git
 if test -f ~/.ssh/id_ed25519
     ssh-add ~/.ssh/id_ed25519 >/dev/null 2>/dev/null
 end
@@ -16,6 +24,8 @@ end
 # -----------------------------------------------------
 # General
 # -----------------------------------------------------
+alias root="cd /"
+alias home="cd $HOME"
 alias .="cd .."
 alias ..="cd .."
 alias ...="cd ../.."
