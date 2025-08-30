@@ -44,21 +44,6 @@ alias vim="$EDITOR"
 alias wifi="nmtui"
 alias cnt='echo " " (find . -maxdepth 1 -mindepth 1 \( -type f -o -type d \) | wc -l)'
 
-
-## RSync (Move and Copy with progress bars & confirmations)
-function mvv
-    rsync -ah --info=progress2 --interactive --remove-source-files $argv
-    for src in $argv
-        if test -d "$src"
-            find "$src" -type d -empty -delete
-        end
-    end
-end
-
-function cpv
-    rsync -ah --info=progress2 --interactive $argv
-end
-
 # -----------------------------------------------------
 # Package Managers
 # -----------------------------------------------------
