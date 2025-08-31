@@ -14,6 +14,7 @@ ALIS_REPO="https://github.com/libertine89/alis"
 SETUP_SCRIPT="$GIT_DIR/dotfiles/setup/setup-arch.sh"
 SDDM_THEME="sugar-candy"
 SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
+SDDM_WALLPAPER="default.jpg"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
 CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
 CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
@@ -249,13 +250,16 @@ _install_sddm_theme() {
 
     # Copy wallpapers into the selected theme folder
     echo -e "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
-    sudo cp -r "$GIT_DIR/dotfiles/dotfiles/.config/ml4w/wallpapers/"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
+    #sudo cp -r "$GIT_DIR/dotfiles/dotfiles/.config/ml4w/wallpapers/"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
+    sudo cp -r "$GIT_DIR/dotfiles/sddm-themes/wallpapers/$SDDM_WALLPAPER"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
 
     # Update theme.conf to set Background="default.jpg"
     THEME_CONF="$SDDM_THEMES_DIR/$SDDM_THEME/theme.conf"
     if [ -f "$THEME_CONF" ]; then
         echo "Updating background in $THEME_CONF..."
-        sudo sed -i 's/^Background=.*/Background="default.jpg"/' "$THEME_CONF"
+        #sudo sed -i 's/^Background=.*/Background="deafult.jpg"/' "$THEME_CONF"
+        sudo sed -i "s|^Background=.*|Background=\"$SDDM_WALLPAPER\"|" "$THEME_CONF"
+
     else
         echo "Warning: $THEME_CONF not found!"
     fi
