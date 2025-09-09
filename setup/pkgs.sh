@@ -51,7 +51,7 @@ tools=(
 
 distro=(
     # Hyprland
-    "hyprland"
+    #"hyprland"
     "libnotify"
     "qt5-wayland"
     "qt6-wayland"
