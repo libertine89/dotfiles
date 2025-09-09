@@ -1,0 +1,30 @@
+[pyprland]
+plugins = [ 
+"expose", #comma after all and last
+"scratchpads",
+]
+
+[expose]
+include_special = false
+
+[scratchpads.term]
+animation = "fromTop"
+position = "5% 5%"
+command = "kitty --class kitty-dropterm"
+class = "kitty-dropterm"
+size = "75% 60%"
+
+## Copy these binds to hyprland
+#
+# put this line at the top with the binds
+# $pypr = uwsm-app -- /usr/local/bin/pypr-client
+#
+# bind = $mainMod, W, exec, $pypr expose
+# bind = $mainMod SHIFT, enter, exec, $pypr toggle term
+#
+#
+#
+# add this to auto start
+# exec-once = /usr/bin/pypr --config ~/.config/pypr/pyprland.toml
+#
+# add "pyprland" to pkgs.sh ## install with yay pyprland

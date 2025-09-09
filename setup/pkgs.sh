@@ -103,3 +103,13 @@ distro=(
     "sddm"
     "cbonsai"
 )
+
+hyprgit=(
+    base-devel
+    git
+    cmake
+    meson
+    ninja
+    pkgconf
+    cpio
+)
