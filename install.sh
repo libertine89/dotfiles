@@ -49,6 +49,13 @@ cat <<"EOF"
                 /_/
 
 EOF
+
+    if [[ "$(tty)" != /dev/tty* ]]; then
+        echo "⚠️ This script must be run from a TTY (not inside a graphical session)."
+        echo "Please switch to a TTY (e.g., Ctrl+Alt+F2) and re-run the script."
+        exit 1
+    fi
+
     echo "ML4W Dotfiles for Hyprland for $distro"
     echo -e "${NONE}"
     echo "This setup script will install all required packages and dependencies for the dotfiles."
@@ -125,9 +132,12 @@ _check_hypr() {
         if hyprctl version | grep -q "Plugin API: enabled"; then
             echo "✅ Hyprland Git is installed"
         else
-            echo "⚠️ Hyprland installed but not Git version. Upgrading now"
-                sudo pacman -Rns hyprland
-                _install_hypr
+            echo "⚠️ Hyprland installed but not Git version."
+            echo "Stopping any running Hyprland sessions..."
+            pkill -TERM -u "$USER_NAME" Hyprland || true
+            echo "Installing Hyprland"
+            sudo pacman -Rns hyprland
+            _install_hypr
         fi
     else
         echo "❌ Hyprland not installed, installing hyprland-git"
@@ -410,7 +420,7 @@ main(){
     _execute_step "Updating System" _update_system
     _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
-    _execute_step "Installing Hyprland-Git" _install_hypr
+    #_execute_step "Installing Hyprland-Git" _install_hypr
     _execute_step "Installing General Packages" _installPackages "${general[@]}"
     _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
     _execute_step "Installing Tools Packages" _installPackages "${tools[@]}"
