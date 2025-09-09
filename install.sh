@@ -420,7 +420,7 @@ main(){
     _execute_step "Updating System" _update_system
     _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
-    #_execute_step "Installing Hyprland-Git" _install_hypr
+    _execute_step "Installing Hyprland-Git" _check_hypr
     _execute_step "Installing General Packages" _installPackages "${general[@]}"
     _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
     _execute_step "Installing Tools Packages" _installPackages "${tools[@]}"
