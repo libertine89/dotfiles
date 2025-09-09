@@ -11,6 +11,7 @@ HOME_DIR="/home/$USER_NAME"
 GIT_DIR="$HOME_DIR/Git"
 DOTFILES_REPO="https://github.com/libertine89/dotfiles"
 ALIS_REPO="https://github.com/libertine89/Balis"
+HYPRSCROLLER_REPO="https://github.com/cpiber/hyprscroller.git"
 SETUP_SCRIPT="$GIT_DIR/dotfiles/setup/setup-arch.sh"
 SDDM_THEME="sugar-candy"
 SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
@@ -21,6 +22,7 @@ CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
 SNAPPER_ROOT_HOURLY=12
 SNAPPER_ROOT_DAILY=7
 SNAPPER_HOME_DAILY=7
+HYPRSCROLLER="true" # Install hyprsroller?
 
 # --------------------------------------------------------------
 # Colours
@@ -32,7 +34,7 @@ BLUE='\033[1;34m'
 NONE='\033[0m'
 
 # --------------------------------------------------------------
-# Helper & Functions
+# Helpers & Functions
 # --------------------------------------------------------------
 
 _writeHeader() {
@@ -116,6 +118,42 @@ _installYay() {
     echo ":: yay has been installed successfully."
 }
 
+
+_check_hypr() {
+    if pacman -Qi hyprland &> /dev/null; then
+
+        if hyprctl version | grep -q "Plugin API: enabled"; then
+            echo "✅ Hyprland Git is installed"
+        else
+            echo "⚠️ Hyprland installed but not Git version. Upgrading now"
+                sudo pacman -Rns hyprland
+                _install_hypr
+        fi
+    else
+        echo "❌ Hyprland not installed, installing hyprland-git"
+        _install_hypr
+    fi
+}
+_install_hypr(){
+    for pkg in "${hyprgit[@]}"; do
+        if [[ $(_isInstalled "${pkg}") == 0 ]]; then
+            echo ":: ${pkg} is already installed."
+        else
+        yay -S --noconfirm --needed "${pkg}"
+        fi
+    done
+    yay -S --noconfirm hyprland-git
+    echo "Hyprland Git Installed"
+    
+    echo "Getting Hyprscroller"
+    if [ "${HYPRSCROLLER}" == "true" ]; then
+        cd $GIT_DIR/hyprscroller 
+        make all
+        make install
+        echo "Hyprscroller Installed"
+    fi 
+}
+
 _installPackages() {
     for pkg; do
         if [[ $(_isInstalled "${pkg}") == 0 ]]; then
@@ -191,6 +229,17 @@ _clone_gits(){
         echo "Alis repo already exists, pulling latest changes..."
         git -C "$GIT_DIR/alis" pull
     fi
+
+    # Clone Hyprsrcoller if not already present 
+    if [ ! -d "$GIT_DIR/hyprscroller/.git" ] && [ "${HYPRSCROLLER}" == "true" ]; then
+        echo -e "${BLUE}   --->${WHITE_BOLD}  Cloning Hyprscroller repo...${NONE}"
+        git clone "$HYPRSCROLLER_REPO" "$GIT_DIR/hyprscroller"
+    elif [ -d "$GIT_DIR/hyprscroller/.git" ]; then
+        echo "Hyprscroller repo already exists, pulling latest changes..."
+        git -C "$GIT_DIR/hyprscroller" pull
+    else
+        echo "Skipping Hyprscroller..."
+    fi
 }
 
 _install_dotfiles(){
@@ -201,25 +250,19 @@ _install_dotfiles(){
     git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting
 
     # Backup existing dotfiles if they exist
-    if [ -f "$HOME_DIR/.bashrc" ]; then
-        mv "$HOME_DIR/.bashrc" "$HOME_DIR/.bashrc.backup"
-        echo -e " \ ${BLUE}   --->${WHITE_BOLD}  Backed up existing .bashrc to .bashrc.backup.${NONE}"
-    fi
-
-    if [ -f "$HOME_DIR/.zshrc" ]; then
-        mv "$HOME_DIR/.zshrc" "$HOME_DIR/.zshrc.backup"
-        echo -e " | ${BLUE}   --->${WHITE_BOLD}  Backed up existing .zshrc to .zshrc.backup.${NONE}"
-    fi
-
-    if [ -f "$HOME_DIR/.config/hypr/hyprland.conf" ]; then
-        mv "$HOME_DIR/.config/hypr/hyprland.conf" "$HOME_DIR/.config/hypr/hyprland.conf.backup"
-        echo -e " / ${BLUE}   --->${WHITE_BOLD}  Backed up existing hyprland.conf to hyprland.conf.backup.${NONE}"
-    fi
-
-     if [ -f "$HOME_DIR/.local/share/user-places.xbel" ]; then
-        mv "$HOME_DIR/.local/share/user-places.xbel" "$HOME_DIR/.local/share/user-places.xbel.backup"
-        echo -e " | ${BLUE}   --->${WHITE_BOLD}  Backed up existing user-places.xbel to user-places.xbel.backup.${NONE}"
-    fi
+    BACKUPS=(
+        ".bashrc"
+        ".zshrc"
+        ".config/hypr/hyprland.conf"
+        ".local/share/user-place.xbel"
+    )
+    
+    for file in "${BACKUPS[@]}"; do
+        if [ -f "$HOME_DIR/${file}" ]; then
+            mv "$HOME_DIR/${file}" "$HOME_DIR/${file}.backup"
+            echo -e "${BLUE}   --->${WHITE_BOLD}  Backed up existing ${file} to ${file}.backup.${NONE}"
+        fi
+    done
 
     # Use GNU Stow to symlink dotfiles into home directory
     echo -e "${BLUE}   --->${WHITE_BOLD}  Stowing dotfiles into $HOME_DIR...${NONE}"
@@ -229,14 +272,6 @@ _install_dotfiles(){
 
 _install_sddm_theme() {
     echo -e "${BLUE}   --->${WHITE_BOLD}  Installing SDDM theme: $SDDM_THEME...${NONE}"
-
-    # Setting up sudoers for hyprpaper later
-    #SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
-    #if [ ! -f "$SUDOERS_FILE" ]; then
-    #    echo "Setting up sudoers rule for wallpaper updates..."
-    #    echo "$USER_NAME ALL=(ALL) NOPASSWD: /bin/cp -f * /usr/share/sddm/themes/*/default.jpg, /usr/bin/touch /usr/share/sddm/themes/*/default.jpg" | sudo tee "$SUDOERS_FILE" > /dev/null
-    #    sudo chmod 440 "$SUDOERS_FILE"
-    #fi
 
     sudo mkdir -p /usr/share/sddm/themes
 
@@ -250,16 +285,13 @@ _install_sddm_theme() {
 
     # Copy wallpapers into the selected theme folder
     echo -e "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
-    #sudo cp -r "$GIT_DIR/dotfiles/dotfiles/.config/ml4w/wallpapers/"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
     sudo cp -r "$GIT_DIR/dotfiles/sddm-themes/wallpapers/$SDDM_WALLPAPER"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
 
     # Update theme.conf to set Background="default.jpg"
     THEME_CONF="$SDDM_THEMES_DIR/$SDDM_THEME/theme.conf"
     if [ -f "$THEME_CONF" ]; then
         echo "Updating background in $THEME_CONF..."
-        #sudo sed -i 's/^Background=.*/Background="deafult.jpg"/' "$THEME_CONF"
         sudo sed -i "s|^Background=.*|Background=\"$SDDM_WALLPAPER\"|" "$THEME_CONF"
-
     else
         echo "Warning: $THEME_CONF not found!"
     fi
@@ -378,6 +410,7 @@ main(){
     _execute_step "Updating System" _update_system
     _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
+    _execute_step "Installing Hyprland-Git" _install_hypr
     _execute_step "Installing General Packages" _installPackages "${general[@]}"
     _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
     _execute_step "Installing Tools Packages" _installPackages "${tools[@]}"
