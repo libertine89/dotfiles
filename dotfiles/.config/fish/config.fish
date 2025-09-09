@@ -64,13 +64,13 @@ function aptd; sudo apt update; end
 function aptg; sudo apt upgrade; end
 function aptrm; sudo apt remove $argv; end
 
-function pacman; command sudo pacman -S $argv; end
+function pacs; command sudo pacman -S $argv; end
 function pacup; sudo pacman -Syu; end               # Update & Upgrade
 function pacd; sudo pacman -Sy; end                 # Update Pacman
 function pacg; sudo pacman -Su; end                 # Upgrade Packages
 function pacrm; sudo pacman -Rns $argv; end
 
-function yay; command yay -S $argv; end
+function yays; command yay -S $argv; end
 function yayup; yay -Syu; end                       # Update & Upgrade
 function yayd; yay -Sy; end                         # Update AUR & Pacman
 function yayg; yay -Su; end                         # Upgrade Packages
