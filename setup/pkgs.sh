@@ -100,4 +100,5 @@ hyprgit=(
     meson
     ninja
     pkgconf
+    cpio
 )
