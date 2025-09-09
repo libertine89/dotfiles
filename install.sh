@@ -418,7 +418,7 @@ main(){
     _writeHeader "Arch"
     _execute_step "Configuring Snapshot" _snapper_cfg
     _execute_step "Pre Dotfiles Snapshot" _snapshot "Pre Dotfiles Snapshot"
-    #_execute_step "Cloning Git Repos" _clone_gits
+    _execute_step "Cloning Git Repos" _clone_gits
     source $GIT_DIR/dotfiles/setup/pkgs.sh
     _execute_step "Updating System" _update_system
     _execute_step "Adding Custom Mirrors" _add_mirrors
