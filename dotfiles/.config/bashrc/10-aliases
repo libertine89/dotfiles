@@ -45,13 +45,13 @@ aptd() { sudo apt update; }
 aptg() { sudo apt upgrade; }
 aptrm() { sudo apt remove "$@"; }
 ## Pacman
-pacman() { command sudo pacman -S "$@"; }
+pacs() { command sudo pacman -S "$@"; }
 pacup() { sudo pacman -Syu; }             # Update & Upgrade
 pacd() { sudo pacman -Sy; }               # Update Pacman
 pacg() { sudo pacman -Su; }               # Upgrade packages
 pacrm() { sudo pacman -Rns "$@"; }
 ## AUR
-yay() { command yay -S "$@"; }
+yays() { command yay -S "$@"; }
 yayup() { yay -Syu; }                     # Update & Upgrade
 yayd() { yay -Sy; }                       # Update AUR & Pacman
 yayg() { yay -Su; }                       # Upgrade packages
