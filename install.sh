@@ -8,21 +8,25 @@ set -euo pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 USER_NAME="$(whoami)"
 HOME_DIR="/home/$USER_NAME"
+
 GIT_DIR="$HOME_DIR/Git"
 DOTFILES_REPO="https://github.com/libertine89/dotfiles"
 ALIS_REPO="https://github.com/libertine89/Balis"
-HYPRSCROLLER_REPO="https://github.com/cpiber/hyprscroller.git"
-SETUP_SCRIPT="$GIT_DIR/dotfiles/setup/setup-arch.sh"
+
 SDDM_THEME="sugar-candy"
 SDDM_THEMES_DIR="$GIT_DIR/dotfiles/sddm-themes"
 SDDM_WALLPAPER="default.jpg"
 THEME_DEPENDENCIES="qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
+
 CUSTOM_MIRROR1="https://mirror.bytemark.co.uk/archlinux/\$repo/os/\$arch"
 CUSTOM_MIRROR2="https://mirror.roe.ac.uk/archlinux/\$repo/os/\$arch"
+
 SNAPPER_ROOT_HOURLY=12
 SNAPPER_ROOT_DAILY=7
 SNAPPER_HOME_DAILY=7
-HYPRSCROLLER="true" # Install hyprsroller?
+
+INSTALL_PLUGINS="true"
+HYPRSCROLLER_REPO="https://github.com/cpiber/hyprscroller.git"
 
 # --------------------------------------------------------------
 # Colours
@@ -133,8 +137,6 @@ _check_hypr() {
             echo "✅ Hyprland Git is installed"
         else
             echo "⚠️ Hyprland installed but not Git version."
-            echo "Stopping any running Hyprland sessions..."
-            pkill -TERM -u "$USER_NAME" Hyprland || true
             echo "Installing Hyprland"
             sudo pacman -Rns hyprland
             _install_hypr
@@ -156,7 +158,7 @@ _install_hypr(){
     echo "Hyprland Git Installed"
     
     echo "Getting Hyprscroller"
-    if [ "${HYPRSCROLLER}" == "true" ]; then
+    if [ "${INSTALL_PLUGINS}" == "true" ]; then
         cd $GIT_DIR/hyprscroller 
         make all
         make install
@@ -241,7 +243,7 @@ _clone_gits(){
     fi
 
     # Clone Hyprsrcoller if not already present 
-    if [ ! -d "$GIT_DIR/hyprscroller/.git" ] && [ "${HYPRSCROLLER}" == "true" ]; then
+    if [ ! -d "$GIT_DIR/hyprscroller/.git" ] && [ "${INSTALL_PLUGINS}" == "true" ]; then
         echo -e "${BLUE}   --->${WHITE_BOLD}  Cloning Hyprscroller repo...${NONE}"
         git clone "$HYPRSCROLLER_REPO" "$GIT_DIR/hyprscroller"
     elif [ -d "$GIT_DIR/hyprscroller/.git" ]; then
