@@ -29,7 +29,8 @@ apps=(
     "neovim"
     "blueman"
     "qt6ct"
-    "dolphin" #"nautilus" #file manager, trying dophin
+    "dolphin"
+    "archlinux-xdg-menu" # Add scontext menus
 )
 
 tools=(
