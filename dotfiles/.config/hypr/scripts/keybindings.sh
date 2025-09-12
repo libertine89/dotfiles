@@ -9,7 +9,7 @@
 # -----------------------------------------------------
 # Get keybindings location based on variation
 # -----------------------------------------------------
-config_file=$(<~/.config/hypr/conf/keybinding.conf)
+config_file=$(<~/.config/hypr/conf/keybindings.conf)
 config_file=${config_file//source = ~//home/$USER}
 
 # -----------------------------------------------------
