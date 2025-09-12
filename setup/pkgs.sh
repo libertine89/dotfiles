@@ -17,6 +17,16 @@ hyprland=(
     "xdg-desktop-portal-hyprland"
 )
 
+hyprgit=(
+    base-devel
+    git
+    cmake
+    meson
+    ninja
+    pkgconf
+    cpio
+)
+
 apps=(
     "kitty"
     "wlogout"
@@ -92,14 +102,4 @@ distro=(
     "stow"
     "sddm"
     "cbonsai"
-)
-
-hyprgit=(
-    base-devel
-    git
-    cmake
-    meson
-    ninja
-    pkgconf
-    cpio
 )
