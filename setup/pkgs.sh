@@ -30,10 +30,10 @@ apps=(
     "blueman"
     "qt6ct"
     "dolphin"
-    "archlinux-xdg-menu" # Add scontext menus
 )
 
 tools=(
+    "archlinux-xdg-menu" # Add scontext menus
     "xdg-user-dirs"    
     "xdg-desktop-portal-gtk"    
     "figlet"
