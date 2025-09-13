@@ -22,6 +22,14 @@ keybinds=$(awk -F'[=#]' '
         # Replace the string "$mainMod" with "SUPER" (for the super key)
         gsub(/\$mainMod/, "SUPER", $0)
 
+        gsub(/\$modeMod/, "SHIFT", $0)               # $modeMod >> SHIFT
+        gsub(/\comma/, ",", $0)                      # comma >> ,
+        gsub(/\period/, ".", $0)                     # period >> .
+        gsub(/\mouse:272/, "Left Click", $0)         # mouse272 >> Left Click
+        gsub(/\mouse:273/, "Right Click", $0)        # mouse273 >> Right Click
+        gsub(/\mouse_down/, "Mouse Scroll Down", $0) # mouse_down >> Mouse Scroll Down
+        gsub(/\mouse_up/, "Mouse Scroll Up", $0)     # mouse_up >> Mouse Scroll Up
+
         # Remove "bind" and extra spaces, if any, at the beginning of the line
         gsub(/^bind[[:space:]]*=+[[:space:]]*/, "", $0)
 

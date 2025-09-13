@@ -55,11 +55,13 @@
   },
 
   // ML4W Welcome App
+  /*
   "custom/ml4w-welcome": {
     "on-click": "flatpak run com.ml4w.sidebar",
     "format": " ",
     "tooltip-format": "Open ML4W Sidebar App"
   },
+*/
 
   // Empty
   "custom/empty": {
@@ -82,6 +84,7 @@
   },
 
   // Updates Count
+  /*
   "custom/updates": {
     "format": "  {}",
     "escape": true,
@@ -92,6 +95,7 @@
     "hide-empty-text": true,
     "on-click": "~/.config/ml4w/settings/installupdates.sh"
   },
+*/
 
   // Wallpaper
   "custom/wallpaper": {
@@ -137,6 +141,7 @@
   },
 
   // Rofi Application Launcher
+  /*
   "custom/appmenu": {
     // START APPS LABEL
     "format": "Apps",
@@ -145,6 +150,7 @@
     "on-click-right": "~/.config/hypr/scripts/keybindings.sh",
     "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings"
   },
+*/
 
   // Rofi Application Launcher
   "custom/appmenuicon": {

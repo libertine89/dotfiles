@@ -162,6 +162,25 @@ function pull
     end
 end
 
+function stowdots
+    set STOW_DIR "$HOME/Git/dotfiles"
+    set TARGET_DIR "$HOME"
+
+  echo "Previewing stow actions:"
+  stow --dir="$STOW_DIR" --target="$TARGET_DIR" --no --verbose dotfiles
+
+  echo -ne "\n Continue and apply these changes? [y/N]: "
+    read answer
+
+    if test (string match -qr '^[Yy]$' -- $answer)
+    echo "Stowing..."
+        stow --dir="$STOW_DIR" --target="$TARGET_DIR" dotfiles
+    echo "Dotfiles stowed successfully!"
+    else
+    echo "Aborted. No changes made."
+    end
+end
+
 # -----------------------------------------------------
 # ML4W Apps + Scripts
 # -----------------------------------------------------

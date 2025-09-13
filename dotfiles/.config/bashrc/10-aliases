@@ -136,6 +136,24 @@ pull() {
     done
   fi
 }
+stowdots() {
+  local STOW_DIR="$HOME/Git/dotfiles"
+  local TARGET_DIR="$HOME"
+
+  echo "Previewing stow actions:"
+  stow --dir="$STOW_DIR" --target="$TARGET_DIR" --no --verbose dotfiles
+
+  echo -ne "\n Continue and apply these changes? [y/N]: "
+  read -r answer
+
+  if [[ "$answer" =~ ^[Yy]$ ]]; then
+    echo "Stowing..."
+    stow --dir="$STOW_DIR" --target="$TARGET_DIR" dotfiles
+    echo "Dotfiles stowed successfully!"
+  else
+    echo "Aborted. No changes made."
+  fi
+}
 
 # -----------------------------------------------------
 # ML4W Apps + Scripts

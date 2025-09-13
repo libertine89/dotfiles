@@ -21,8 +21,15 @@ for config in "${configs[@]}"; do
     continue
   fi
 
-  sed -i "s|^source = .*|source = $full_included_path|" "$full_config_path"
-  echo "Switched $name to hyprland: $full_included_path"
+  short_included_path=$(echo "$full_included_path" | sed "s|^$HOME|~|")
+
+  echo "DEBUG: HOME is $HOME"
+  echo "DEBUG: full_included_path is $full_included_path"
+  echo "DEBUG: short_included_path is $short_included_path"
+
+  sed -i "s|^source = .*|source = $short_included_path|" "$full_config_path"
+  echo "Switched $name to hyprland: $short_included_path"
 done
+
 
 hyprctl reload

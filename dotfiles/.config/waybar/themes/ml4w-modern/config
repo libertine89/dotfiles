@@ -29,7 +29,7 @@
         "hyprland/workspaces",
         "group/links",
         //"wlr/taskbar",
-        "group/quicklinks",
+        // "group/quicklinks",
         "custom/empty"
     ],
 
