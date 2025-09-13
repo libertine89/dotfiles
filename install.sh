@@ -27,6 +27,7 @@ SNAPPER_HOME_DAILY=7
 
 INSTALL_PLUGINS="true"
 HYPRSCROLLER_REPO="https://github.com/cpiber/hyprscroller.git"
+HYPRSPACE_REPO="https://github.com/KZDKM/Hyprspace.git"
 
 # --------------------------------------------------------------
 # Colours
@@ -157,12 +158,25 @@ _install_hypr(){
     yay -S --noconfirm hyprland-git
     echo "Hyprland Git Installed"
     
-    echo "Getting Hyprscroller"
+}
+
+_installPlugins(){
     if [ "${INSTALL_PLUGINS}" == "true" ]; then
+        echo "Getting Hyprscroller"
+        git clone "${HYPRSCROLLER_REPO}" "$GIT_DIR/hyprscroller"
         cd $GIT_DIR/hyprscroller 
         make all
         make install
         echo "Hyprscroller Installed"
+
+        echo "Getting Hyprspace"
+        git clone "${HYPRSPACE_REPO}" "$GIT_DIR/hyprspace"
+        cd $GIT_DIR/Hyprspace/src
+        # Correct broken file directory before Make
+        sed -i 's|#include <hyprland/src/managers/AnimationManager.hpp>|#include <hyprland/src/managers/animation/AnimationManager.hpp>|' Globals.hpp
+        cd $GIT_DIR/Hyprspace
+        make all
+        echo "Hyprspace Installed"    
     fi 
 }
 
@@ -426,6 +440,7 @@ main(){
     _execute_step "Adding Custom Mirrors" _add_mirrors
     _execute_step "Installing Yay" _install_yay
     _execute_step "Installing Hyprland-Git" _check_hypr
+    _execute_step "Installing Hyprland Plugins" _installPlugins
     _execute_step "Installing General Packages" _installPackages "${general[@]}"
     _execute_step "Installing Apps Packages" _installPackages "${apps[@]}"
     _execute_step "Installing Tools Packages" _installPackages "${tools[@]}"

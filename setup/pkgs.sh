@@ -102,7 +102,6 @@ distro=(
     "stow"
     "sddm"
     "cbonsai"
-    "pyprland"
 )
 
 hyprgit=(
