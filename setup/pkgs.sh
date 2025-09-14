@@ -31,7 +31,6 @@ apps=(
     "kitty"
     "wlogout"
     "vlc"
-    "nwg-dock-hyprland"
     "waybar"
     "rofi-wayland"
     "nwg-look"
@@ -102,14 +101,4 @@ distro=(
     "stow"
     "sddm"
     "cbonsai"
-)
-
-hyprgit=(
-    base-devel
-    git
-    cmake
-    meson
-    ninja
-    pkgconf
-    cpio
 )

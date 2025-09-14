@@ -59,9 +59,9 @@
     // Cliphist
     "custom/cliphist": {
         "format": "",
-        "on-click": "sleep 0.1 && ~/.config/ml4w/scripts/cliphist.sh",
-        "on-click-right": "sleep 0.1 && ~/.config/ml4w/scripts/cliphist.sh d",
-        "on-click-middle": "sleep 0.1 && ~/.config/ml4w/scripts/cliphist.sh w",
+        "on-click": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh",
+        "on-click-right": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh d",
+        "on-click-middle": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh w",
         "tooltip": false
     },
 
@@ -83,9 +83,9 @@
         "tooltip-format": "{}",
         "escape": true,
         "return-type": "json",
-        "exec": "~/.config/ml4w/scripts/updates.sh",
+        "exec": "~/.config/hypr/scripts/updates.sh",
         "restart-interval": 60,
-        "on-click": "alacritty -e ~/.config/ml4w/scripts/installupdates.sh",
+        "on-click": "alacritty -e ~/.config/hypr/scripts/installupdates.sh",
         "tooltip": false
     },
 
@@ -134,7 +134,7 @@
     // Browser Launcher
     "custom/browser": {
         "format": "",
-        "on-click": "~/.config/ml4w/settings/browser.sh",
+        "on-click": "~/.config/hypr/settings/browser.sh",
         "tooltip": false
     },
 

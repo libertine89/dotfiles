@@ -20,7 +20,7 @@
     },
     // ML4W Welcome App
     "custom/ml4w-welcome": {
-        "on-click": "sleep 0.1 && ~/.config/ml4w/settings/ml4w-sidebar.sh",
+        "on-click": "sleep 0.1 && ~/.config/hypr/settings/ml4w-sidebar.sh",
         "on-click-right": "sleep 0.1 && com.ml4w.welcome",
         "format": " ",
         "tooltip": false
@@ -28,7 +28,7 @@
     // Waybar Themes
     "custom/waybarthemes": {
         "format": "Themes",
-        "on-click": "~/.config/ml4w/waybar/themeswitcher.sh",
+        "on-click": "~/.config/hypr/waybar/themeswitcher.sh",
         "tooltip": false
     },
     "sway/mode": {

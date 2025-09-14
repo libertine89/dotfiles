@@ -182,22 +182,6 @@ function stowdots
 end
 
 # -----------------------------------------------------
-# ML4W Apps + Scripts
-# -----------------------------------------------------
-alias ml4w='flatpak run com.ml4w.welcome'
-alias ml4w-settings='flatpak run com.ml4w.settings'
-alias ml4w-calendar='flatpak run com.ml4w.calendar'
-alias ml4w-hyprland='flatpak run com.ml4w.hyprlandsettings'
-alias ml4w-sidebar='flatpak run com.ml4w.sidebar'
-alias ml4w-options='ml4w-hyprland-setup -m options'
-alias ml4w-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
-alias ml4w-hyprland-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
-alias ml4w-qtile-diagnosis='~/.config/ml4w/qtile/scripts/diagnosis.sh'
-alias ml4w-update='~/.config/ml4w/scripts/installupdates.sh'
-alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
-alias ts='~/.config/ml4w/scripts/arch/snapshot.sh'
-
-# -----------------------------------------------------
 # Window Managers
 # -----------------------------------------------------
 

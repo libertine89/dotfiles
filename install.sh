@@ -61,7 +61,7 @@ EOF
         exit 1
     fi
 
-    echo "ML4W Dotfiles for Hyprland for $distro"
+    echo "Dotfiles for Hyprland for $distro"
     echo -e "${NONE}"
     echo "This setup script will install all required packages and dependencies for the dotfiles."
     echo
@@ -310,7 +310,7 @@ _install_sddm_theme() {
     done
 
     # Copy wallpapers into the selected theme folder
-    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/ml4w/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
+    echo -e "${BLUE}   --->${WHITE_BOLD}  Copying wallpapers from $GIT_DIR/dotfiles/.config/wallpapers into $SDDM_THEMES_DIR/$SDDM_THEME...${NONE}"
     sudo cp -r "$GIT_DIR/dotfiles/sddm-themes/wallpapers/$SDDM_WALLPAPER"* "$SDDM_THEMES_DIR/$SDDM_THEME/"
 
     # Update theme.conf to set Background="default.jpg"

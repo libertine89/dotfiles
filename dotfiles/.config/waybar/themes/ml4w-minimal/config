@@ -18,7 +18,7 @@
 
     // Load Modules
     "include": [
-        "~/.config/ml4w/settings/waybar-quicklinks.json",
+        "~/.config/hypr/settings/waybar-quicklinks.json",
         "~/.config/waybar/modules.json"
     ],
 
@@ -27,10 +27,10 @@
         "format": "   {}",
         "escape": true,
         "return-type": "json",
-        "exec": "~/.config/ml4w/scripts/updates.sh",
+        "exec": "~/.config/hypr/scripts/updates.sh",
         "restart-interval": 60,
-        "on-click": "$(cat ~/.config/ml4w/settings/terminal.sh) --class dotfiles-floating -e ~/.config/ml4w/scripts/installupdates.sh",
-        "on-click-right": "~/.config/ml4w/settings/software.sh"
+        "on-click": "$(cat ~/.config/hypr/settings/terminal.sh) --class dotfiles-floating -e ~/.config/hypr/scripts/installupdates.sh",
+        "on-click-right": "~/.config/hypr/settings/software.sh"
     },
 
     // Pulseaudio
