@@ -16,7 +16,6 @@
     "margin-left": 0,
     "margin-right": 0,    
     "spacing": 0,
-    "height": 10
     
     // Load Modules
     "include": [
