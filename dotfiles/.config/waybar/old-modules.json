@@ -6,24 +6,40 @@
 //
 //
 {
-	// CIRCLES Style
-	"hyprland/workspaces": {
-		"active-only": false,
-		"all-outputs": true,
-		"format": "{icon}",
-		"show-special": false,
-		"on-click": "activate",
-		"on-scroll-up": "hyprctl dispatch workspace e+1",
-		"on-scroll-down": "hyprctl dispatch workspace e-1",
-			"persistent-workspaces": {
-		  "*": 5
-		},	
-		"format-icons": {
-			"active": "",
-			"default": "",
-			
-		},
-	},
+  // Workspaces
+  "hyprland/workspaces": {
+    "on-scroll-up": "hyprctl dispatch workspace r-1",
+    "on-scroll-down": "hyprctl dispatch workspace r+1",
+    "on-click": "activate",
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{}",
+    "format-icons": {
+      "urgent": "",
+      "active": "",
+      "default": ""
+    },
+    "persistent-workspaces": {
+      "*": 5
+    }
+  },
+
+  // Taskbar
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 18,
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "ignore-list": ["Alacritty", "kitty"],
+    "app_ids-mapping": {
+      "firefoxdeveloperedition": "firefox-developer-edition"
+    },
+    "rewrite": {
+      "Firefox Web Browser": "Firefox",
+      "Foot Server": "Terminal"
+    }
+  },
 
   // Hyprland Window
   "hyprland/window": {
@@ -38,16 +54,19 @@
     "separate-outputs": true
   },
 
+  // ML4W Welcome App
+  /*
+  "custom/hypr-welcome": {
+    "on-click": "flatpak run com.ml4w.sidebar",
+    "format": " ",
+    "tooltip-format": "Open ML4W Sidebar App"
+  },
+*/
+
   // Empty
   "custom/empty": {
     "format": ""
   },
-
-  "custom/separator#line": {
-		"format": " | ",
-		"interval": "once",
-		"tooltip": false
-	},
 
     // Tools
   "custom/tools": {
@@ -57,12 +76,26 @@
 
   // Cliphist
   "custom/cliphist": {
-    "format": "  ",
+    "format": "",
     "on-click": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh",
     "on-click-right": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh d",
     "on-click-middle": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh w",
     "tooltip-format": "Left: Open clipboard Manager\nRight: Delete an entry\nMiddle: Clear list"
   },
+
+  // Updates Count
+  /*
+  "custom/updates": {
+    "format": "  {}",
+    "escape": true,
+    "return-type": "json",
+    "exec": "~/.config/hypr/scripts/updates.sh",
+    "interval": 1800,
+    "signal": 1,
+    "hide-empty-text": true,
+    "on-click": "~/.config/hypr/settings/installupdates.sh"
+  },
+*/
 
   // Wallpaper
   "custom/wallpaper": {
@@ -77,6 +110,13 @@
     "format": "",
     "on-click": "~/.config/waybar/themeswitcher.sh",
     "tooltip-format": "Select a waybar theme"
+  },
+
+  // Settings
+  "custom/settings": {
+    "format": "",
+    "on-click": "sleep 0.1 && com.ml4w.dotfilessettings",
+    "tooltip-format": "ML4W Dotfiles Settings"
   },
 
   // Keybindings
@@ -101,8 +141,20 @@
   },
 
   // Rofi Application Launcher
+  /*
+  "custom/appmenu": {
+    // START APPS LABEL
+    "format": "Apps",
+    // END APPS LABEL
+    "on-click": "sleep 0.2;pkill rofi || rofi -show drun -replace",
+    "on-click-right": "~/.config/hypr/scripts/keybindings.sh",
+    "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings"
+  },
+*/
+
+  // Rofi Application Launcher
   "custom/appmenuicon": {
-    "format": "  ",
+    "format": "",
     "on-click": "sleep 0.2;rofi -show drun -replace",
     "on-click-right": "~/.config/hypr/scripts/keybindings.sh",
     "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings"
@@ -110,7 +162,7 @@
 
   // Power Menu
   "custom/exit": {
-    "format": "   ",
+    "format": "",
     "on-click": "~/.config/hypr/scripts/wlogout.sh",
     "on-click-right": "hyprlock",
     "tooltip-format": "Left: Power menu\nRight: Lock screen"
@@ -118,29 +170,33 @@
 
   // SwayNC
   "custom/notification": {
-		"tooltip": false,
-		"format": " {icon}",
-		"format-icons": {
-		  "notification": "<span foreground='red'><sup></sup></span> ",
-		  "none": " ",
-		  "dnd-notification": "<span foreground='red'><sup></sup></span> ",
-		  "dnd-none": " ",
-		  "inhibited-notification": "<span foreground='red'><sup></sup></span> ",
-		  "inhibited-none": " ",
-		  "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span> ",
-		  "dnd-inhibited-none": " "
-		},
-		"return-type": "json",
-		"exec-if": "which swaync-client",
-		"exec": "swaync-client -swb",
-		"on-click": "swaync-client -t -sw",
-		"on-click-right": "swaync-client -d -sw",
-		"escape": true
+    "tooltip-format": "Left: Notifications\nRight: Do not disturb",
+    "format": "{icon}",
+    "format-icons": {
+      "notification":
+        "<span rise='8pt'><span foreground='red'><sup></sup></span></span>",
+      "none": "",
+      "dnd-notification":
+        "<span rise='8pt'><span foreground='red'><sup></sup></span></span>",
+      "dnd-none": "",
+      "inhibited-notification":
+        "<span rise='8pt'><span foreground='red'><sup></sup></span></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification":
+        "<span rise='8pt'><span foreground='red'><sup></sup></span></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
   },
 
   // Hypridle inhibitor
   "custom/hypridle": {
-    "format": "  ",
+    "format": "",
     "return-type": "json",
     "escape": true,
     "exec-on-event": true,
@@ -168,11 +224,9 @@
 
   // Clock
   "clock": {
-	  "interval": 1,
-    //"format": " {:%I:%M:%S %p}", // AM PM format
-    "format": "  {:%H:%M:%S}", // 24H
-	  "format-alt": "  {:%H:%M:%p     %Y, %d %B, %A}",
-    "on-click-right": "flatpak run com.ml4w.calendar",
+    "format": "{:%H:%M %a}",
+    "on-click": "flatpak run com.ml4w.calendar",
+    "timezone": "",
     "tooltip": false
   },
 
@@ -183,17 +237,14 @@
   },
 
   // CPU
-	"cpu": {
-	  "format": " {usage}%",
-	  "interval": 1,
-	  "min-length": 5,
+  "cpu": {
+    "format": "/ C {usage}% ",
     "on-click": "~/.config/hypr/settings/system-monitor.sh"
   },
 
   // Memory
   "memory": {
-	  "interval": 1,
-	  "format": "󰓅 {used:0.1f}G",
+    "format": "/ M {}% ",
     "on-click": "~/.config/hypr/settings/system-monitor.sh"
   },
 
@@ -205,50 +256,8 @@
     "on-click": "~/.config/hypr/settings/system-monitor.sh"
   },
 
-  // Language
   "hyprland/language": {
-    "format": "Keymap= {short}"
-  },
-
-  // Network
-  "network#icon": {
-    "interval": 1,
-    "format-wifi": "󰤨",
-    "format-ethernet": "󰈁",
-    "format-disconnected": "󰌙",
-    "tooltip": false,
-    "on-click": "~/.config/hypr/settings/networkmanager.sh",
-    "on-click-right": "~/.config/hypr/scripts/nm-applet.sh toggle"
-  },
-
-  "network#details": {
-    "interval": 1,
-    "format": "{ifname}",
-    "format-wifi": "U {bandwidthUpBytes}  D {bandwidthDownBytes}",
-    "format-ethernet": "U {bandwidthUpBytes}  D {bandwidthDownBytes}",
-    "format-linked": "󰈁 {ifname} (No IP)",
-    "format-disconnected": "Disconnected",
-    "tooltip-format-wifi": "{essid} {icon} {signalStrength}%\nIP: {ipaddr}",
-    "tooltip-format-ethernet": "{ifname}\nIP: {ipaddr}",
-    "tooltip-format-disconnected": "No connection",
-    "min-length": 1,
-    "max-length": 35,
-    "format-icons": [
-      "󰤯", "󰤟", "󰤢", "󰤥", "󰤨"
-    ]
-  },
-
-  // Network Group
-  "group/network": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 300,
-      "transition-left-to-right": false
-    },
-  "modules": [
-    "network#icon",
-    "network#details"
-    ]
+    "format": "/ K {short}"
   },
 
   // Group Hardware
@@ -259,13 +268,7 @@
       "children-class": "not-memory",
       "transition-left-to-right": false
     },
-    "modules": [
-      "custom/system", 
-      "cpu", 
-      "memory", 
-      "disk", 
-      "hyprland/language"
-      ]
+    "modules": ["custom/system", "disk", "cpu", "memory", "hyprland/language"]
   },
 
   // Group Tools
@@ -284,6 +287,15 @@
     ]
   },
 
+  // Group Links
+  "group/links": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/chatgpt",
+      "custom/empty"
+    ]
+  },
+
   // Group Settings
   "group/settings": {
     "orientation": "inherit",
@@ -297,6 +309,21 @@
       "custom/waybarthemes",
       "custom/wallpaper"
     ]
+  },
+
+  // Network
+  "network": {
+    "format": "{ifname}",
+    "format-wifi": " {essid} ({signalStrength}%)",
+    "format-ethernet": "  {ifname}",
+    "format-disconnected": "Disconnected ⚠",
+    "tooltip-format": " {ifname} via {gwaddri}",
+    "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
+    "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click": "~/.config/hypr/settings/networkmanager.sh",
+    "on-click-right": "~/.config/hypr/scripts/nm-applet.sh toggle",
   },
 
   // Battery
@@ -315,39 +342,38 @@
     "format-icons": [" ", " ", " ", " ", " "]
   },
 
-  // Pulseaudio
-  "pulseaudio": {
-	  "format": "{icon} {volume}%",
-	  "format-bluetooth": "{icon} 󰂰 {volume}%",
-	  "format-muted": "󰖁",
-	  "on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle",
-    "on-click-right": "pavucontrol",
-	  "format-icons": {
-		  "headphone": "",
-		  "hands-free": "",
-		  "headset": "",
-		  "phone": "",
-		  "portable": "",
-		  "car": "",
-		  "default": [
-			  "", "", "󰕾",  ""
-		  ],
-		  "ignored-sinks": [
-			  "Easy Effects Sink"
-		  ],
-	  },
+  // Power Profiles Daemon
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
   },
 
-  "pulseaudio#microphone": {
-	  "format": "{format_source}",
-	  "format-source": " {volume}%",
-	  "format-source-muted": "",
-	  "on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle-mic",
-	  "on-click-right": "pavucontrol",
-	  "on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --mic-inc",
-	  "on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --mic-dec",
-	  "tooltip-format": "{source_desc} | {source_volume}%",
-	  "scroll-step": 5,
+  // Pulseaudio
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{icon}  {volume}%",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": " ",
+      "hands-free": " ",
+      "headset": " ",
+      "phone": " ",
+      "portable": " ",
+      "car": " ",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
   },
 
   // Bluetooth

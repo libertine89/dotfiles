@@ -101,4 +101,5 @@ distro=(
     "stow"
     "sddm"
     "cbonsai"
+    "pamixer"
 )
