@@ -1,6 +1,5 @@
 
 {
-
 "layer": "top",
 //"mode": "dock",
 "exclusive": true,
@@ -9,17 +8,20 @@
 "spacing": 1,
 "fixed-center": true,
 "ipc": true,
+"padding-left": 10,
+"padding-right": 10,
 "margin-top": 3,
+"margin-bottom": 5,
 "margin-left": 3,
 "margin-right": 3,
 
 "include": [
-        "~/.config/waybar/modules.json"
+    "~/.config/waybar/modules.json"
     ],
 
 "modules-left": [
 	"custom/appmenuicon",
-	"custom/separator#line",
+	"custom/separator",
 	"hyprland/workspaces"
 	],
 
@@ -29,16 +31,16 @@
 	
 "modules-right": [
 	"tray",
+	"group/network",
 	"group/hardware",
 	// "group/settings",
-	"group/network",
 	"group/tools",
-	"custom/separator#line",
+	"custom/separator",
 	"pulseaudio#microphone",
 	"pulseaudio",
-	"custom/separator#line",
+	"custom/separator",
 	"clock",
-	"custom/separator#line",
+	"custom/separator",
 	"battery",
 	"custom/notification",
 	"custom/exit"

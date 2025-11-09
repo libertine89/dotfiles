@@ -1,0 +1,10 @@
+
+@define-color backgroundlight #0390fc;
+@define-color backgrounddark #1e1e2e;
+@define-color workspacesbackground1 #0390fc;
+@define-color workspacesbackground2 #0384fc; /* inactivebuttons */
+@define-color bordercolor #cba6f7;
+@define-color textcolor1 #cba6f7; /* main text */
+@define-color textcolor2 #cba6f7; /* arch logo */
+
+@import '../style.css';

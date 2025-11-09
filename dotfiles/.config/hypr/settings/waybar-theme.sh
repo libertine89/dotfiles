@@ -1,1 +1,1 @@
-/DOTTY_DOTS;/DOTTY_DOTS
+/sleek;/sleek/colored

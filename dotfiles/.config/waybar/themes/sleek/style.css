@@ -1,17 +1,16 @@
-{
+*{
 font-family: "JetBrainsMono Nerd Font";
 
 font-weight: bold;
 min-height: 0;
 /* set font-size to 100% if font scaling is set to 1.00 using nwg-look */
-font-size: 95%;
+font-size: 98%;
 font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
 }
 
 window#waybar {
     background: transparent;
 	border-radius: 5px;
-	color: whitesmoke;
 }
 
 window#waybar.hidden {
@@ -26,16 +25,16 @@ window#waybar.empty #window {
 }
 
 tooltip {
-	color: #cdd6f4;
-    background: #1e1e2e;
+	color: @textcolor1;
+    background: @backgrounddark;
 	border-radius: 10px;
 	border-width: 2px;
 	border-style: solid;
-	border-color: #11111b;
+	border-color: @bordercolor;
 }
 
 tooltip label {
-    color: #cdd6f4;
+    color: @textcolor1;
     padding-right: 2px;
     padding-left: 2px;
 }
@@ -44,28 +43,22 @@ tooltip label {
 .modules-right,
 .modules-left {
 	border-radius: 15px 15px 15px 15px;
-	background-color:#1e1e2e;
+	background-color: @backgrounddark;
     opacity:0.8;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	padding-right: 4px;
-	padding-left: 4px;
+    padding-right: 5px;
+    padding-left: 10px;
 }
 
 .modules-center {
 	background: transparent;
     font-size: 16;
     opacity:1;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	padding-right: 4px;
-	padding-left: 4px;
 }
 
 #taskbar button,
 #workspaces button {
-    color: #cba6f7;
-    background-color: #0384fc; 
+    color: @textcolor1;
+    background-color: @workspacesbackground2; /* #0384fc */
     padding: 0px 5px;
     margin:4px 1px;
     border-radius: 10px;
@@ -77,9 +70,11 @@ tooltip label {
 
 #taskbar button.active,
 #workspaces button.active {
-    color: #cba6f7;
+    color: @textcolor1;
     border-radius: 10px;
-    background-color: #0390fc; 
+    background-color: @backgroundlight;
+    padding: 0px 5px;
+    margin:4px 1px;
     min-width: 40px;
     background-size: 400% 400%;
     opacity:0.8;
@@ -87,7 +82,7 @@ tooltip label {
 }
 
 #workspaces button.focused {
-    color: #b4befe;
+    color: @textcolor1;
 }
 
 #workspaces button.urgent {
@@ -97,7 +92,7 @@ tooltip label {
 
 #taskbar button:hover,
 #workspaces button:hover {
-    color: #feb4b4;
+    color: @textcolor1;
     border-radius: 10px;
  	padding-left: 2px;
     padding-right: 2px;
@@ -130,6 +125,10 @@ tooltip label {
 #window,
 #wireplumber,
 #workspaces,
+#custom-system,
+#custom-tools,
+#custom-cliphist,
+#custom-hypridle,
 #custom-backlight,
 #custom-browser,
 #custom-cava,
@@ -142,8 +141,8 @@ tooltip label {
 #custom-hint,
 #custom-hypridle,
 #custom-menu,
-#custom-power_vertical,
 #custom-power,
+#custom-power_vertical,
 #custom-settings,
 #custom-spotify,
 #custom-swaync,
@@ -160,12 +159,9 @@ tooltip label {
 #custom-weather.showyIcyDay,
 #custom-weather.snowyIcyNight,
 #custom-weather.sunnyDay 
-#custom-exit, 
-#custom-appmenuicon,
-#custom-separator#line,
 #pulseaudio.microphone,
-#custom-notification{
-    color: #cdd6f4;
+#custom-notification {
+    color: @textcolor1;
     border-radius: 8px;
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -173,6 +169,38 @@ tooltip label {
 	padding-left: 6px;
 	margin-left: 2px;     
     margin-right: 2px;    
+}
+
+#custom-exit {
+    color: @textcolor1;
+    border-radius: 8px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-right: 6px;
+	padding-left: 6px;
+	margin-left: 0px;     
+    margin-right: 6px;    
+}
+
+#custom-separator {
+    color: @textcolor1;
+}
+
+#custom-appmenuicon {
+    font-size: 16px;
+    color: @textcolor2;
+    background-color: @backgroundlight;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 5px;
+    margin-left: 2px;
+    margin-right: 7px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    min-width: 30px;
+    border-radius: 999px;
+    opacity:1;
 }
 
 #temperature.critical {

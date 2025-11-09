@@ -43,10 +43,10 @@
     "format": ""
   },
 
-  "custom/separator#line": {
-		"format": " | ",
+  "custom/separator": {
+		"format": "|",
 		"interval": "once",
-		"tooltip": false
+		"tooltip": false,
 	},
 
     // Tools
@@ -57,7 +57,7 @@
 
   // Cliphist
   "custom/cliphist": {
-    "format": "  ",
+    "format": "",
     "on-click": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh",
     "on-click-right": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh d",
     "on-click-middle": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh w",
@@ -102,7 +102,7 @@
 
   // Rofi Application Launcher
   "custom/appmenuicon": {
-    "format": "  ",
+    "format": "",
     "on-click": "sleep 0.2;rofi -show drun -replace",
     "on-click-right": "~/.config/hypr/scripts/keybindings.sh",
     "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings"
@@ -110,7 +110,7 @@
 
   // Power Menu
   "custom/exit": {
-    "format": "   ",
+    "format": "",
     "on-click": "~/.config/hypr/scripts/wlogout.sh",
     "on-click-right": "hyprlock",
     "tooltip-format": "Left: Power menu\nRight: Lock screen"
@@ -119,16 +119,16 @@
   // SwayNC
   "custom/notification": {
 		"tooltip": false,
-		"format": " {icon}",
+		"format": "{icon}",
 		"format-icons": {
 		  "notification": "<span foreground='red'><sup></sup></span> ",
-		  "none": " ",
+		  "none": "",
 		  "dnd-notification": "<span foreground='red'><sup></sup></span> ",
-		  "dnd-none": " ",
+		  "dnd-none": "",
 		  "inhibited-notification": "<span foreground='red'><sup></sup></span> ",
-		  "inhibited-none": " ",
+		  "inhibited-none": "",
 		  "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span> ",
-		  "dnd-inhibited-none": " "
+		  "dnd-inhibited-none": ""
 		},
 		"return-type": "json",
 		"exec-if": "which swaync-client",
@@ -140,7 +140,7 @@
 
   // Hypridle inhibitor
   "custom/hypridle": {
-    "format": "  ",
+    "format": "",
     "return-type": "json",
     "escape": true,
     "exec-on-event": true,
@@ -214,7 +214,7 @@
   "network#icon": {
     "interval": 1,
     "format-wifi": "󰤨",
-    "format-ethernet": "󰈁",
+    "format-ethernet": "󰈀",
     "format-disconnected": "󰌙",
     "tooltip": false,
     "on-click": "~/.config/hypr/settings/networkmanager.sh",
@@ -317,7 +317,7 @@
 
   // Pulseaudio
   "pulseaudio": {
-	  "format": "{icon} {volume}%",
+	  "format": "{icon}   {volume}%",
 	  "format-bluetooth": "{icon} 󰂰 {volume}%",
 	  "format-muted": "󰖁",
 	  "on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle",
